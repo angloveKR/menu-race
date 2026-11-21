@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>오늘 뭐 먹지? 메뉴 경마</title>
+<meta name="description" content="메뉴를 골라 경마 트랙을 달리게 하고 1등으로 들어온 메뉴를 먹자! 점심·저녁 메뉴 고르기 경마 게임.">
+<meta name="keywords" content="메뉴 고르기, 점심 메뉴 추천, 저녁 뭐 먹지, 메뉴 뽑기, 메뉴 룰렛, 경마 게임, 오늘 뭐 먹지">
+<meta name="theme-color" content="#2f6e3c">
+<!-- 사이트 아이콘 -->
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<!-- 카톡·SNS 공유 미리보기 (이미지는 꼭 전체 주소여야 해요) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://anglovekr.github.io/menu-race/">
+<meta property="og:title" content="🏇 오늘 뭐 먹지? 메뉴 경마">
+<meta property="og:description" content="메뉴들이 트랙을 3바퀴 달려요. 아이템·날씨·사진 판독까지! 1등으로 들어온 메뉴를 먹자.">
+<meta property="og:image" content="https://anglovekr.github.io/menu-race/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root{
+  --bg:#fff8ef; --card:#ffffff; --ink:#2b2118; --sub:#8a7a6a; --line:#eadfce;
+  --accent:#ff6b3d; --accent2:#ffb347;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;}
+button{font:inherit;cursor:pointer;border:none;color:inherit}
+[hidden]{display:none!important}
+
+/* ---------- 헤더 ---------- */
+header{display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:12px 16px;max-width:680px;margin:0 auto}
+h1{font-size:20px;margin:0;letter-spacing:-.5px}
+h1 small{display:block;font-size:12px;color:var(--sub);font-weight:500;letter-spacing:0}
+.modes{display:flex;background:#f1e6d6;border-radius:999px;padding:3px;flex:none}
+.modes button{background:none;padding:6px 10px;border-radius:999px;font-size:13px;color:var(--sub)}
+.modes button.on{background:#fff;color:var(--ink);font-weight:700;box-shadow:0 1px 3px #0002}
+
+/* ---------- 메뉴 고르기 화면 ---------- */
+main{max-width:680px;margin:0 auto;padding:0 12px 24px}
+.panel{background:var(--card);border-radius:18px;padding:16px;box-shadow:0 2px 10px #a0743a14}
+.panel h2{font-size:15px;margin:0 0 10px}
+.sec{margin-bottom:20px}
+.sec:last-child{margin-bottom:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:#f4ece0;padding:7px 12px;border-radius:999px;font-size:14px}
+.chip.on{background:var(--ink);color:#fff}
+.board{display:flex;flex-wrap:wrap;gap:6px;max-height:260px;overflow-y:auto;padding:2px}
+body.pc .board{max-height:none}
+.mi{background:#faf4ea;border:1.5px solid var(--line);padding:7px 10px;border-radius:12px;font-size:14px;font-weight:600}
+.mi.on{background:#fff1e8;border-color:var(--accent);color:var(--accent)}
+.mi:disabled{opacity:.35}
+.stepper{display:flex;align-items:center;gap:10px}
+.stepper .rb{width:34px;height:34px;border-radius:50%;background:#f4ece0;font-size:20px;font-weight:700;flex:none}
+.stepper b{font-size:20px;min-width:22px;text-align:center}
+.runners{display:flex;flex-wrap:wrap;gap:6px}
+.runner{display:flex;align-items:center;gap:6px;padding:6px 6px 6px 10px;border-radius:999px;background:#faf4ea;font-weight:600}
+.runner .dot{width:10px;height:10px;border-radius:50%}
+.runner .x{background:none;color:var(--sub);font-size:15px;padding:0 6px}
+.row{display:flex;gap:8px}
+.input{flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1.5px solid var(--line);font:inherit;font-size:16px;background:#fff}
+.btn{padding:10px 14px;border-radius:12px;background:#f4ece0;font-weight:700;font-size:14px;white-space:nowrap}
+.btn.dark{background:var(--ink);color:#fff}
+.big{width:100%;padding:16px;border-radius:16px;font-size:18px;font-weight:800;color:#fff;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 4px 14px #ff6b3d55}
+.big:disabled{opacity:.4;box-shadow:none}
+.hint{font-size:12px;color:var(--sub);margin-top:6px}
+.sticky{position:sticky;bottom:0;padding:10px 0 4px;background:linear-gradient(transparent,var(--card) 30%)}
+
+/* ---------- 메뉴판 ---------- */
+main{padding-bottom:190px!important}
+.bhead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.bhead h2{margin:0!important;font-size:18px!important}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;margin-bottom:6px;border-bottom:1.5px solid var(--line);scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;background:#f4ece0;padding:8px 14px;border-radius:999px;font-size:14px;font-weight:700;color:var(--sub)}
+.tab.on{background:var(--ink);color:#fff}
+.tab .n{display:inline-block;min-width:18px;margin-left:4px;padding:0 5px;border-radius:9px;background:var(--accent);color:#fff;font-size:11px}
+.grp{margin-top:14px}
+.grp h3{font-size:13px;color:var(--sub);margin:0 0 8px;font-weight:800;letter-spacing:.5px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
+.mi{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px 8px;
+  background:#faf4ea;border:2px solid transparent;border-radius:14px;font-size:13px;font-weight:700;color:var(--ink)}
+.mi .e{font-size:28px;line-height:1.1}
+.mi.on{background:#fff1e8;border-color:var(--accent)}
+.mi .badge{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;color:#fff;font-size:12px;
+  display:grid;place-items:center;font-weight:900;box-shadow:0 0 0 2px #fff}
+.mi:disabled{opacity:.35}
+.addrow{margin-top:14px}
+.promo{display:flex;align-items:center;gap:12px;margin-top:16px;padding:14px;border-radius:16px;text-decoration:none;color:#fff;
+  background:linear-gradient(135deg,#1e3a8a,#2563eb);box-shadow:0 4px 14px #2563eb44}
+.promo .pe{font-size:34px;flex:none}
+.promo .pt{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.promo b{font-size:16px}
+.promo small{font-size:12px;opacity:.85;line-height:1.35}
+.promo .pg{flex:none;background:#fff;color:#1e3a8a;font-weight:900;font-size:13px;padding:8px 12px;border-radius:999px}
+.guide{margin-top:18px;padding-top:14px;border-top:1.5px solid var(--line)}
+.guide h3{font-size:16px;margin:0 0 10px}
+.guide details{background:#faf4ea;border-radius:14px;margin-bottom:8px;overflow:hidden}
+.guide summary{padding:12px 14px;font-weight:800;font-size:15px;cursor:pointer;list-style:none;display:flex;justify-content:space-between}
+.guide summary::-webkit-details-marker{display:none}
+.guide summary::after{content:"▾";color:var(--sub);transition:.2s}
+.guide details[open] summary::after{transform:rotate(180deg)}
+.gl{padding:0 12px 12px;display:flex;flex-direction:column;gap:6px}
+.gi{display:flex;gap:10px;align-items:flex-start;background:#fff;border-radius:12px;padding:8px 10px}
+.gi>b{font-size:24px;line-height:1.2;width:30px;text-align:center;flex:none}
+.gi strong{font-size:14px}
+.gi p{margin:2px 0 0;font-size:13px;color:var(--sub);line-height:1.45}
+.gn{margin:4px 2px 0;font-size:12.5px;color:var(--ink);line-height:1.5}
+.opts{margin-top:18px;padding-top:14px;border-top:1.5px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:14px;background:#faf4ea}
+.opt b{font-size:15px}
+.stepper{display:flex;align-items:center;gap:8px}
+.stepper .rb{width:32px;height:32px;border-radius:50%;background:#fff;font-size:18px;font-weight:700;flex:none}
+.stepper b{font-size:18px;min-width:18px;text-align:center}
+/* 출전 명단 독 */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:5;background:#fffdf9ee;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  box-shadow:0 -4px 20px #a0743a22;padding:10px 12px max(10px,env(safe-area-inset-bottom))}
+.dockIn{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
+.dockTop{display:flex;align-items:center;justify-content:space-between;font-size:14px}
+.cntb{background:var(--accent);color:#fff;border-radius:9px;padding:1px 7px;font-size:12px;margin-left:2px}
+.lnk{background:none;color:var(--sub);font-size:13px;text-decoration:underline}
+.runners{display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;min-height:34px;scrollbar-width:none}
+.runners::-webkit-scrollbar{display:none}
+.runner{flex:none;display:flex;align-items:center;gap:5px;padding:5px 4px 5px 10px;border-radius:999px;background:#f4ece0;font-weight:700;font-size:14px}
+.runner .dot{width:10px;height:10px;border-radius:50%}
+.runner .x{background:none;color:var(--sub);font-size:14px;padding:0 6px}
+.dock .big{padding:13px;font-size:17px}
+
+/* ---------- 경마 화면 (꽉 찬 화면) ---------- */
+#race{position:fixed;inset:0;z-index:10;background:#2f6e3c;display:flex;flex-direction:column;color:#fff}
+.exit{position:absolute;top:10px;right:10px;z-index:3;background:#00000055;color:#fff;padding:8px 12px}
+.exit:disabled{opacity:.3}
+.hud{position:absolute;top:10px;left:10px;z-index:3;display:flex;gap:8px;align-items:center}
+.hud .btn{background:#00000055;color:#fff;padding:8px 10px;font-size:16px}
+.lapb{background:#ffe17a;color:#2b2118;font-weight:900;padding:6px 10px;border-radius:10px;font-size:14px;letter-spacing:.5px}
+#race.slow .stage::after{content:"SLOW MOTION";position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
+  font-weight:900;letter-spacing:3px;color:#fff;background:#d00a;padding:4px 12px;border-radius:8px;z-index:3}
+#race.slow .stage{box-shadow:inset 0 0 120px #000a}
+.cast{position:absolute;left:50%;top:50%;transform:translate(-50%,-30%);z-index:2;pointer-events:none;
+  width:max-content;max-width:min(88%,560px);text-align:center;padding:10px 18px;border-radius:16px;
+  background:#00000059;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+  font-weight:900;font-size:clamp(17px,2.4vw,26px);line-height:1.35;text-shadow:0 1px 4px #0008;word-break:keep-all}
+.cast.flash{animation:flash .45s}
+@keyframes flash{from{opacity:0;transform:translate(-50%,-10%) scale(.92)}to{opacity:1;transform:translate(-50%,-30%)}}
+.rbody{flex:1;min-height:0;display:flex}
+.stage{position:relative;flex:1;min-width:0;min-height:0}
+#svg{position:absolute;inset:0;width:100%;height:100%}
+.rank{background:#1f4a28cc;padding:10px;display:grid;gap:4px;align-content:start}
+.ri{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:10px;background:#ffffff14;font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden}
+.ri:first-child{background:#ffd54a33;color:#ffe17a}
+.ri .no{width:18px;text-align:center;opacity:.8}
+.ri .dot{width:10px;height:10px;border-radius:50%;flex:none;box-shadow:0 0 0 2px #fff}
+.ri .nm{overflow:hidden;text-overflow:ellipsis}
+/* PC: 순위표 오른쪽 / 폰: 순위표 아래 */
+body.pc .rbody{flex-direction:row}
+body.pc .rank{width:210px}
+body.mobile .rbody{flex-direction:column}
+body.mobile .rank{grid-template-columns:1fr 1fr;padding:8px;padding-bottom:max(8px,env(safe-area-inset-bottom))}
+body.mobile .ri{font-size:12px;padding:4px 6px}
+
+.emo{transform-box:fill-box;transform-origin:center}
+.running .emo{animation:bob .26s ease-in-out infinite alternate}
+@keyframes bob{from{transform:translateY(0) rotate(-8deg)}to{transform:translateY(-3px) rotate(8deg)}}
+.rc.win circle{stroke:#ffe17a;stroke-width:5}
+.spin .emo{animation:spin .7s linear infinite!important}
+@keyframes spin{to{transform:rotate(360deg)}}
+.zapped circle{stroke:#ffe600;stroke-width:5}
+.ibox{transform-box:fill-box;transform-origin:center;animation:pulse .8s ease-in-out infinite alternate}
+@keyframes pulse{from{transform:scale(.9) rotate(-6deg)}to{transform:scale(1.08) rotate(6deg)}}
+.tag{font-weight:900;fill:#fff;stroke:#2b2118;stroke-width:4px;paint-order:stroke;stroke-linejoin:round;
+  transform-box:fill-box;transform-origin:center;animation:tagUp 1.6s ease-out forwards;pointer-events:none}
+@keyframes tagUp{0%{transform:translateY(6px) scale(.6);opacity:0}15%{transform:translateY(0) scale(1.1);opacity:1}25%{transform:scale(1)}75%{opacity:1}100%{transform:translateY(-14px);opacity:0}}
+.pop{transform-box:fill-box;transform-origin:center;animation:floatUp 1s ease-out forwards}
+@keyframes floatUp{from{transform:translateY(0) scale(.6);opacity:1}to{transform:translateY(-40px) scale(1.4);opacity:0}}
+/* 📸 리플레이: 중계 화면 느낌 */
+#race.replay .stage::before,#race.replay .stage::after{content:"";position:absolute;left:0;right:0;height:9%;background:#000;z-index:4;pointer-events:none}
+#race.replay .stage::before{top:0}
+#race.replay .stage::after{bottom:0;top:auto;transform:none;letter-spacing:0;padding:0;border-radius:0}
+#race.replay #svg{filter:sepia(.55) contrast(1.15) saturate(.8)}
+#race.replay .hud,#race.replay .exit{visibility:hidden}
+#race.frozen #svg{filter:grayscale(1) contrast(1.3)}
+.replayTag{position:absolute;top:calc(9% + 10px);left:12px;z-index:5;background:#000c;color:#fff;font-weight:900;font-size:14px;
+  letter-spacing:1.5px;padding:6px 12px;border-radius:6px;display:flex;align-items:center;gap:8px}
+.replayTag .rec{width:10px;height:10px;border-radius:50%;background:#f33;animation:blink .5s infinite alternate}
+.verdict{position:absolute;right:12px;bottom:calc(9% + 12px);z-index:5;background:#fffffff0;color:#2b2118;border-radius:14px;
+  padding:12px 16px;min-width:180px;box-shadow:0 6px 24px #0008;animation:rise .35s ease-out}
+.verdict .vt{font-size:12px;font-weight:800;color:#888;margin-bottom:4px}
+.verdict .v1{font-size:20px;font-weight:900}
+.verdict .v2{font-size:14px;font-weight:700;color:#666}
+.verdict .vm{margin-top:6px;font-size:18px;font-weight:900;color:#e0362c}
+/* 🏆 시상식 */
+.podium{position:absolute;inset:0;z-index:7;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 50% 30%,#fff4 0,#0000 40%),#0009;animation:fadeIn .4s}
+@keyframes fadeIn{from{opacity:0}}
+.ptitle{color:#ffe17a;font-size:clamp(22px,4vw,34px);font-weight:900;margin-bottom:18px;text-shadow:0 2px 12px #000}
+.pods{display:flex;align-items:flex-end;gap:10px}
+.pcol{width:clamp(96px,16vw,150px);display:flex;flex-direction:column;align-items:center;color:#fff}
+.pem{font-size:clamp(44px,7vw,72px);animation:drop .6s cubic-bezier(.3,1.6,.5,1) both}
+.pname{font-weight:900;font-size:clamp(14px,2vw,18px);margin:4px 0 6px;text-align:center;text-shadow:0 1px 4px #000;animation:fadeIn .4s both}
+.pblock{width:100%;border-radius:12px 12px 0 0;background:linear-gradient(#fff3,#0003),var(--c);display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-start;padding-top:8px;box-shadow:inset 0 0 0 3px #fff6;animation:grow .7s ease-out both;transform-origin:bottom}
+.pm{font-size:clamp(26px,4vw,36px)}
+.pk{font-size:clamp(28px,5vw,44px);font-weight:900;text-shadow:0 2px 6px #0006}
+.p1 .pblock{height:clamp(120px,22vh,190px)} .p2 .pblock{height:clamp(85px,15vh,135px)} .p3 .pblock{height:clamp(60px,10vh,95px)}
+.p3 .pblock,.p3 .pem,.p3 .pname{animation-delay:.2s} .p2 .pblock,.p2 .pem,.p2 .pname{animation-delay:.7s} .p1 .pblock,.p1 .pem,.p1 .pname{animation-delay:1.2s}
+.p1 .pem{font-size:clamp(56px,9vw,92px);filter:drop-shadow(0 0 14px #ffe17a)}
+@keyframes grow{from{transform:scaleY(0)}}
+@keyframes drop{from{transform:translateY(-160px) scale(.5);opacity:0}}
+.medal{pointer-events:none}
+/* 🌦️ 날씨 */
+.wb{background:#00000066;color:#fff;font-weight:800;padding:6px 10px;border-radius:10px;font-size:13px}
+.wb:empty{display:none}
+.wfx{position:absolute;inset:0;pointer-events:none;z-index:2}
+#race.w-rain .wfx{background:repeating-linear-gradient(105deg,#ffffff00 0 14px,#cfe8ff55 14px 15px,#ffffff00 15px 38px);background-size:200px 200px;animation:rain .35s linear infinite}
+@keyframes rain{to{background-position:-60px 200px}}
+#race.w-rain #svg{filter:saturate(.75) brightness(.88)}
+#race.w-night{background:#0d1a2b}
+#race.w-night #svg{filter:brightness(.55) saturate(.85)}
+#race.w-night .wfx{background:radial-gradient(ellipse at 10% 0%,#fff6 0,#0000 35%),radial-gradient(ellipse at 90% 0%,#fff6 0,#0000 35%),
+  radial-gradient(ellipse at 50% 110%,#fff3 0,#0000 40%),radial-gradient(ellipse at 50% 50%,#0000 50%,#000a 100%)}
+#race.w-night .rc circle{filter:drop-shadow(0 0 6px #fff)}
+#race.w-night .ibox{filter:drop-shadow(0 0 8px #ffe17a)}
+.windline{stroke:#fff;stroke-opacity:.28;stroke-width:2;stroke-dasharray:60 340;animation:wind 1.4s linear infinite}
+@keyframes wind{to{stroke-dashoffset:-400}}
+.zapfx.boom{background:radial-gradient(circle,#ffb347,#ff5a5f00 70%)!important}
+.shot{filter:drop-shadow(0 0 6px #ff6b3d)}
+.zapfx{position:absolute;inset:0;background:#fff7a8;pointer-events:none;z-index:4;animation:zap .6s ease-out forwards}
+@keyframes zap{0%{opacity:.35}100%{opacity:0}}
+.rc.dim{opacity:.72}
+.halo{animation:halo 1s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}
+@keyframes halo{from{transform:scale(.9);opacity:.7}to{transform:scale(1.12);opacity:1}}
+.ri.me{box-shadow:inset 0 0 0 2px #ffe17a;background:#ffe17a22}
+.cheer{position:absolute;inset:0;z-index:5;display:grid;place-items:center;background:#0006;padding:16px}
+.cbox{background:#fff;color:var(--ink);border-radius:20px;padding:20px;width:min(420px,100%);text-align:center;animation:rise .3s ease-out}
+.ct{font-size:20px;font-weight:900}
+.cs{font-size:13px;color:var(--sub);margin:4px 0 14px}
+.clist{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cp{display:flex;align-items:center;gap:6px;justify-content:center;padding:12px 8px;border-radius:14px;background:#faf4ea;border:2px solid var(--line);font-weight:800;font-size:15px}
+.cp.on{border-color:#f5b800;background:#fff6d6}
+.cp .dot{width:12px;height:12px;border-radius:50%}
+.cheerRes{font-weight:800;margin:-6px 0 14px;font-size:15px}
+.result .order{display:flex;flex-direction:column;gap:6px}
+.photo{font-weight:800;color:var(--accent)}
+.full{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 10px}
+.time{font-size:12px}
+.ri .tr{font-size:10px;margin-left:2px}
+.tr.up{color:#7CFC8A}.tr.down{color:#ff8a8a}
+.ri .gap{margin-left:auto;font-size:11px;opacity:.75;font-weight:600;padding-left:6px}
+body.mobile .ri .gap{font-size:10px}
+.lapb.final{background:#ff5a5f;color:#fff;animation:blink .6s ease-in-out infinite alternate}
+@keyframes blink{to{transform:scale(1.08)}}
+.toggle{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:14px;background:#faf4ea}
+.toggle b{font-size:15px}
+.sw{width:50px;height:30px;border-radius:999px;background:#d8ccbb;position:relative;flex:none;transition:.2s}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px #0003}
+.sw.on{background:var(--accent)}
+.sw.on::after{left:23px}
+.legend{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:12px;color:var(--sub);margin-top:8px}
+
+.count{position:absolute;inset:0;display:grid;place-items:center;font-size:min(42vh,62vw,320px);font-weight:900;color:#fff;
+  line-height:1;text-shadow:0 8px 40px #000a,0 0 0 #000;-webkit-text-stroke:6px #2b2118;paint-order:stroke fill;
+  pointer-events:none;z-index:6;background:radial-gradient(circle,#0005 0,#0000 65%)}
+.count.go{color:#ffe17a;font-size:min(30vh,40vw,220px)}
+.count.pop{animation:pop .95s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{0%{transform:scale(2.2);opacity:0}25%{transform:scale(.92);opacity:1}45%{transform:scale(1.05)}70%{transform:scale(1);opacity:1}100%{transform:scale(.96);opacity:.85}}
+
+/* ---------- 결과 ---------- */
+.modal{position:fixed;inset:0;background:#0007;display:grid;place-items:center;padding:20px;z-index:20}
+.result{background:#fff;color:var(--ink);border-radius:24px;padding:28px 22px 20px;width:min(380px,100%);text-align:center;
+  animation:rise .4s ease-out}
+@keyframes rise{from{transform:translateY(30px) scale(.9);opacity:0}to{transform:none;opacity:1}}
+.result .trophy{font-size:26px}
+.result .wem{font-size:84px;line-height:1.1;margin:6px 0}
+.result .lab{color:var(--sub);font-size:14px}
+.result .wnm{font-size:32px;font-weight:900;margin:2px 0 6px}
+.result .order{font-size:13px;color:var(--sub);margin-bottom:16px}
+.result .btns{display:flex;flex-direction:column;gap:8px}
+.result .btns .row .btn{flex:1}
+.confetti{position:fixed;top:-20px;width:10px;height:14px;z-index:30;pointer-events:none;border-radius:2px;
+  animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+</style>
+</head>
+<body class="mobile">
+
+<header>
+  <h1>🏇 오늘 뭐 먹지?<small>메뉴 경마 · 1등으로 들어온 메뉴를 먹자</small></h1>
+  <div class="modes" id="modes">
+    <button data-m="auto">자동</button>
+    <button data-m="mobile">📱 폰</button>
+    <button data-m="pc">💻 PC</button>
+  </div>
+</header>
+
+<main>
+  <section class="panel">
+    <div class="bhead">
+      <h2>🍽️ 메뉴판</h2>
+      <span class="hint" style="margin:0">먹고 싶은 메뉴를 눌러서 골라요 (2~8개)</span>
+    </div>
+    <div class="tabs" id="tabs"></div>
+    <div id="board"></div>
+    <div class="row addrow">
+      <input class="input" id="customIn" maxlength="10" placeholder="✏️ 메뉴판에 없으면 직접 넣기">
+      <button class="btn dark" id="addBtn">추가</button>
+    </div>
+
+    <div class="opts">
+      <div class="opt">
+        <div><b>🎲 랜덤으로 뽑기</b><div class="hint" style="margin:2px 0 0">지금 보는 탭에서 골라 줘요</div></div>
+        <div class="stepper">
+          <button class="rb" id="minus">−</button><b id="cnt">6</b><button class="rb" id="plus">+</button>
+          <button class="btn dark" id="reroll">뽑기</button>
+        </div>
+      </div>
+      <div class="opt">
+        <div><b>🎁 아이템 모드</b><div class="hint" style="margin:2px 0 0">트랙 위 ❓ 상자를 먹으면 아이템 발동</div></div>
+        <button class="sw" id="itemSw" aria-label="아이템 모드"></button>
+      </div>
+      <div class="opt">
+        <div><b>🌦️ 날씨 이벤트</b><div class="hint" style="margin:2px 0 0">판마다 맑음 · 비 · 야간 · 강풍 중 랜덤</div></div>
+        <button class="sw" id="weatherSw" aria-label="날씨 이벤트"></button>
+      </div>
+    </div>
+  
+    <div class="guide">
+      <h3>📖 게임 설명</h3>
+      <details open>
+        <summary>🎁 아이템</summary>
+        <div class="gl">
+          <div class="gi"><b>🚀</b><div><strong>부스터</strong><p>2~3초 동안 점점 빨라졌다가 풀려요 (최대 1.7배)</p></div></div>
+          <div class="gi"><b>🧲</b><div><strong>자석</strong><p>1등 쪽으로 끌려가요. 멀리 뒤처질수록 세게!</p></div></div>
+          <div class="gi"><b>⚡</b><div><strong>번개</strong><p>나만 빼고 전부 감전돼서 2초 동안 느려져요</p></div></div>
+          <div class="gi"><b>🎯</b><div><strong>미사일</strong><p>바로 앞 순위 메뉴를 쫓아가서 맞혀요. 맞으면 빙글빙글</p></div></div>
+          <div class="gi"><b>💣</b><div><strong>1등 미사일</strong><p>어디서 쏘든 1등을 끝까지 쫓아가서 펑! 1등 근처 메뉴도 휘말려요</p></div></div>
+          <div class="gi"><b>🍌</b><div><strong>바나나</strong><p>미끄러져서 빙글빙글, 확 느려져요</p></div></div>
+          <div class="gi"><b>🐢</b><div><strong>거북이</strong><p>2~3초 동안 느릿느릿</p></div></div>
+          <p class="gn">💡 뒤처질수록 좋은 아이템이 잘 나와요. 1등은 81%가 🍌🐢, 꼴등은 89%가 좋은 아이템! 한 번 먹으면 6초 동안은 상자를 못 먹어요. 1등은 미사일을 못 뽑아요.</p>
+        </div>
+      </details>
+      <details>
+        <summary>🌦️ 날씨</summary>
+        <div class="gl">
+          <div class="gi"><b>☀️</b><div><strong>맑음 (30%)</strong><p>특별한 효과 없이 실력 대결</p></div></div>
+          <div class="gi"><b>🌧️</b><div><strong>비 (25%)</strong><p>트랙에 물웅덩이가 생겨요. 밟으면 느려지고, 코너에선 가끔 💦 미끄덩!</p></div></div>
+          <div class="gi"><b>🌙</b><div><strong>야간 경기 (25%)</strong><p>어두워서 ❓ 상자가 가까이 와야 보여요. 상자를 덜 노려요</p></div></div>
+          <div class="gi"><b>💨</b><div><strong>강풍 (20%)</strong><p>결승선 쪽 직선은 순풍이라 빨라지고, 반대쪽 직선은 맞바람이라 느려져요</p></div></div>
+        </div>
+      </details>
+      <details>
+        <summary>🏇 경주 규칙</summary>
+        <div class="gl">
+          <div class="gi"><b>🎲</b><div><strong>게이트 추첨</strong><p>출발 자리는 매번 랜덤. 안쪽 게이트가 조금 유리해요</p></div></div>
+          <div class="gi"><b>🔄</b><div><strong>코너는 안쪽이 유리</strong><p>바깥으로 돌면 거리가 길어져서 손해. 그래서 다들 안쪽 레일로 파고들어요</p></div></div>
+          <div class="gi"><b>🚧</b><div><strong>추월</strong><p>앞이 막히면 못 뚫고 지나가요. 옆으로 빠져서 돌아가야 해요</p></div></div>
+          <div class="gi"><b>🌬️</b><div><strong>슬립스트림</strong><p>앞 메뉴 바로 뒤에 붙어 달리면 바람을 덜 맞아서 살짝 빨라져요</p></div></div>
+          <div class="gi"><b>💨</b><div><strong>막판 스퍼트</strong><p>마지막 30% 구간에선 메뉴마다 남은 힘이 랜덤으로 정해져요</p></div></div>
+          <div class="gi"><b>🎬</b><div><strong>슬로모션 · 📸 사진 판독</strong><p>마지막 직선은 슬로모션! 1·2등이 반 마신 안쪽이면 리플레이로 판독해요</p></div></div>
+          <div class="gi"><b>⭐</b><div><strong>응원</strong><p>응원하는 메뉴가 크게 반짝여요. 속도엔 영향 없어요</p></div></div>
+          <p class="gn">⚖️ 모든 규칙이 모든 메뉴에 똑같이 적용돼서, 여러 판 해 보면 <b>어떤 메뉴든 우승 확률이 같아요.</b></p>
+        </div>
+      </details>
+    </div>
+    <a class="promo" href="https://anglovekr.github.io/number-baseball/" target="_blank" rel="noopener">
+      <span class="pe">⚾</span>
+      <span class="pt"><b>숫자야구 해결사</b><small>스트라이크·볼만 넣으면 다음에 부를 숫자를 추천해 줘요</small></span>
+      <span class="pg">해보기 →</span>
+    </a>
+  </section>
+</main>
+
+<!-- 아래에 붙어 있는 출전 명단 + 출발 버튼 -->
+<div class="dock" id="dock">
+  <div class="dockIn">
+    <div class="dockTop"><b>출전 명단 <span id="selCnt" class="cntb"></span></b><button class="lnk" id="clearBtn">전부 빼기</button></div>
+    <div class="runners" id="runners"></div>
+    <button class="big" id="startBtn">🏁 출발!</button>
+  </div>
+</div>
+
+<!-- 경마 화면 -->
+<section id="race" hidden>
+  <div class="rbody">
+    <div class="stage">
+      <button class="btn exit" id="exitBtn">✕ 나가기</button>
+      <div class="hud"><button class="btn" id="muteBtn">🔊</button><span class="lapb" id="lap">LAP 1/2</span><span class="wb" id="wBadge"></span></div>
+      <div class="wfx" id="wfx"></div>
+      <div class="cast" id="msg"></div>
+      <svg id="svg" preserveAspectRatio="xMidYMid meet"></svg>
+      <div class="count" id="count" hidden></div>
+      <div class="replayTag" id="replayTag" hidden><span class="rec"></span>REPLAY · 📸 PHOTO FINISH</div>
+      <div class="verdict" id="verdict" hidden></div>
+      <div class="podium" id="podium" hidden><div class="ptitle">🏆 시상식 🏆</div><div class="pods" id="pods"></div></div>
+      <div class="cheer" id="cheerPick" hidden>
+        <div class="cbox">
+          <div class="ct">누구를 응원할래요? ⭐</div>
+          <div class="cs">응원하는 메뉴는 트랙에서 크게 반짝여요</div>
+          <div class="clist" id="cheerList"></div>
+          <button class="btn" id="cheerSkip" style="background:none;color:var(--sub);margin-top:6px">응원 없이 볼래요</button>
+        </div>
+      </div>
+    </div>
+    <div class="rank" id="rank"></div>
+  </div>
+</section>
+
+<!-- 결과 -->
+<div class="modal" id="modal" hidden>
+  <div class="result">
+    <div class="trophy">🏆 우승 🏆</div>
+    <div class="wem" id="wEm"></div>
+    <div class="lab">오늘의 메뉴는</div>
+    <div class="wnm" id="wNm"></div>
+    <div class="order" id="order"></div>
+    <div class="cheerRes" id="cheerRes" hidden></div>
+    <div class="btns">
+      <button class="big" id="rAgain">🔁 같은 메뉴로 한 판 더</button>
+      <div class="row">
+        <button class="btn" id="rChange">메뉴 바꾸기</button>
+        <button class="btn" id="rCopy">📋 결과 복사</button>
+      </div>
+      <button class="btn" id="rClose" style="background:none;color:var(--sub)">트랙 다시 보기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const MENUS = {
+  "한식": [["김치찌개","🍲"],["된장찌개","🥘"],["비빔밥","🍚"],["불고기","🥩"],["삼겹살","🥓"],["제육볶음","🐷"],["냉면","🧊"],["국밥","🍲"],["칼국수","🍜"],["닭갈비","🍗"]],
+  "중식": [["짜장면","🍜"],["짬뽕","🌶️"],["탕수육","🍖"],["마라탕","🔥"],["볶음밥","🍛"],["양꼬치","🍢"]],
+  "일식": [["초밥","🍣"],["라멘","🍜"],["돈가스","🐖"],["우동","🥢"],["규동","🍚"],["텐동","🍤"],["회","🐟"]],
+  "양식": [["피자","🍕"],["햄버거","🍔"],["파스타","🍝"],["스테이크","🥩"],["샐러드","🥗"],["타코","🌮"],["샌드위치","🥪"]],
+  "분식": [["떡볶이","🌶️"],["김밥","🍙"],["라면","🍜"],["순대","🌭"],["튀김","🍤"],["쫄면","🥢"],["어묵","🍢"]],
+  "기타": [["치킨","🍗"],["족발","🐷"],["보쌈","🥬"],["쌀국수","🍜"],["카레","🍛"],["도시락","🍱"],["편의점","🏪"],["샤브샤브","🍲"]]
+};
+const COLORS = ["#ff5a5f","#3b82f6","#ffcc00","#a855f7","#22c55e","#ff8a00","#ec4899","#14b8a6"];
+const MY = "내 메뉴", MAX = 8;
+const $ = id => document.getElementById(id);
+const load = (k, d) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } };
+const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+let custom = load("mr_custom", []);
+let tab = load("mr_tab", "전체");
+let count = load("mr_count", 6);
+let mode = load("mr_mode", "auto");
+let itemsOn = load("mr_items", true);
+let weatherOn = load("mr_weather", true), weather = "sun", puddles = [];
+let boxes = [];
+let cheer = null, wake = null, raceStart = 0, tape = [], tapeShift = 0, shots = [];
+let placeN = 0, firstCross = 0, crossInfo = null, photoPending = false;
+let runners = [];
+let racing = false, racers = [], raf = 0;
+
+/* ---------- 폰 / PC ---------- */
+function actualMode(){ return mode === "auto" ? (innerWidth >= 820 && innerWidth > innerHeight ? "pc" : "mobile") : mode; }
+function applyMode(){
+  const m = actualMode();
+  document.body.classList.toggle("pc", m === "pc");
+  document.body.classList.toggle("mobile", m === "mobile");
+  [...$("modes").children].forEach(b => b.classList.toggle("on", b.dataset.m === mode));
+  if (!$("race").hidden) { drawTrack(); placeAll(); renderRank(); }
+}
+$("modes").onclick = e => { const m = e.target.dataset.m; if(!m) return; mode = m; save("mr_mode", m); applyMode(); };
+let lastM = actualMode();
+addEventListener("resize", () => { const m = actualMode(); if (m !== lastM){ lastM = m; applyMode(); } });
+
+/* ---------- 메뉴 고르기 ---------- */
+function allCats(){ return custom.length ? [...Object.keys(MENUS), MY] : Object.keys(MENUS); }
+const listOf = c => (c === MY ? custom : MENUS[c]).map(([n, e]) => ({name:n, em:e}));
+function pool(){
+  const seen = new Set(), out = [];
+  for (const c of (tab === "전체" ? allCats() : [tab])) for (const p of listOf(c))
+    if (!seen.has(p.name)) { seen.add(p.name); out.push(p); }
+  return out;
+}
+const shuffle = a => { for (let i=a.length-1;i>0;i--){ const j=Math.random()*(i+1)|0; [a[i],a[j]]=[a[j],a[i]]; } return a; };
+
+function renderSetup(){
+  if (tab !== "전체" && !allCats().includes(tab)) tab = "전체";
+  const chosen = runners.map(r => r.name), full = runners.length >= MAX;
+  // 탭 (고른 개수 표시)
+  $("tabs").innerHTML = ["전체", ...allCats()].map(c => {
+    const n = c === "전체" ? runners.length : listOf(c).filter(p => chosen.includes(p.name)).length;
+    return `<button class="tab ${tab === c ? "on" : ""}" data-t="${c}">${c}${n ? `<span class="n">${n}</span>` : ""}</button>`;
+  }).join("");
+  // 메뉴판 (전체면 종류별로 묶어서)
+  const card = p => {
+    const k = chosen.indexOf(p.name), on = k >= 0;
+    return `<button class="mi ${on ? "on" : ""}" data-n="${esc(p.name)}" data-e="${p.em}" ${full && !on ? "disabled" : ""}>
+      <span class="e">${p.em}</span>${esc(p.name)}${on ? `<span class="badge" style="background:${COLORS[k]}">${k+1}</span>` : ""}</button>`;
+  };
+  const groups = tab === "전체" ? allCats() : [tab];
+  $("board").innerHTML = groups.map(c =>
+    `<div class="grp">${groups.length > 1 ? `<h3>${c}</h3>` : ""}<div class="grid">${listOf(c).map(card).join("")}</div></div>`).join("");
+  // 출전 명단
+  $("selCnt").textContent = `${runners.length}/${MAX}`;
+  $("cnt").textContent = count;
+  $("runners").innerHTML = runners.length ? runners.map((r,i) =>
+    `<div class="runner"><span class="dot" style="background:${COLORS[i]}"></span>${r.em} ${esc(r.name)}<button class="x" data-i="${i}" aria-label="빼기">✕</button></div>`).join("")
+    : `<div class="hint" style="margin:8px 0 0">메뉴판에서 먹고 싶은 메뉴를 눌러 주세요!</div>`;
+  $("clearBtn").hidden = !runners.length;
+  $("startBtn").disabled = runners.length < 2;
+  $("startBtn").textContent = runners.length < 2 ? "메뉴를 2개 이상 골라 주세요" : `🏁 ${runners.length}마리 출발!`;
+}
+$("tabs").onclick = e => { const b = e.target.closest(".tab"); if (!b) return; tab = b.dataset.t; save("mr_tab", tab); renderSetup(); };
+$("board").onclick = e => {
+  const b = e.target.closest(".mi"); if (!b || b.disabled) return;
+  const n = b.dataset.n, i = runners.findIndex(r => r.name === n);
+  if (i >= 0) runners.splice(i, 1);
+  else if (runners.length < MAX) runners.push({name:n, em:b.dataset.e});
+  renderSetup();
+};
+$("runners").onclick = e => { const i = e.target.dataset.i; if (i === undefined) return; runners.splice(+i, 1); renderSetup(); };
+$("clearBtn").onclick = () => { runners = []; renderSetup(); };
+$("minus").onclick = () => { if (count > 2){ count--; save("mr_count", count); renderSetup(); } };
+$("plus").onclick  = () => { if (count < MAX){ count++; save("mr_count", count); renderSetup(); } };
+$("reroll").onclick = () => { runners = shuffle(pool()).slice(0, count); renderSetup(); };
+function addCustom(){
+  const n = $("customIn").value.trim(); if (!n) return;
+  if (!custom.some(c => c[0] === n)) { custom.push([n, "🍽️"]); save("mr_custom", custom); }
+  if (!runners.some(r => r.name === n) && runners.length < MAX) runners.push({name:n, em:"🍽️"});
+  $("customIn").value = ""; renderSetup();
+}
+$("addBtn").onclick = addCustom;
+$("customIn").onkeydown = e => { if (e.key === "Enter") addCustom(); };
+
+/* ---------- 아이템 ---------- */
+// 효과는 한 번에 확 오지 않고 천천히 세졌다가 천천히 풀려요.
+// w(f): f = 0이면 1등, 1이면 꼴등. 뒤처질수록 좋은 아이템이 잘 나와요 (모두에게 같은 규칙이라 공평!)
+const ITEMS = [
+  {em:"🚀", name:"부스터", w:f => 0.4 + 2.6*f,   dur:2600},
+  {em:"🧲", name:"자석",   w:f => 0.2 + 1.2*f,   dur:2600},
+  {em:"⚡", name:"번개",   w:f => 0.1 + 0.6*f,   dur:2200},
+  {em:"🍌", name:"바나나", w:f => 1.6 - f,       dur:1900},
+  {em:"🐢", name:"거북이", w:f => 1.3 - 0.9*f,   dur:2600},
+  // 공격 아이템 (1등은 못 뽑아요: 쏠 사람이 앞에 없으니까)
+  {em:"🎯", name:"미사일",     w:f => f > 0 ? 0.6 + 1.2*f : 0,  dur:2000},
+  {em:"💣", name:"1등 미사일", w:f => f > 0 ? 0.1 + 0.8*f : 0,  dur:2400},
+];
+function renderItemSw(){ $("itemSw").classList.toggle("on", itemsOn); }
+$("itemSw").onclick = () => { itemsOn = !itemsOn; save("mr_items", itemsOn); renderItemSw(); };
+renderItemSw();
+// 효과 세기 곡선: 처음 35% 동안 서서히 세지고, 마지막 35% 동안 서서히 풀려요
+const env = x => x <= 0 || x >= 1 ? 0 : x < 0.35 ? x / 0.35 : x > 0.65 ? (1 - x) / 0.35 : 1;
+
+/* ---------- 경마 트랙 (직선 2개 + 반원 2개) ---------- */
+const W = 1100, H = 620, CX = 550, CY = 310, S = 230;   // S: 직선 길이의 절반
+const RIN = 110, ROUT_MAX = 290;
+let LW = 22, ROUT = 290;
+const NS = "http://www.w3.org/2000/svg";
+const vertical = () => actualMode() === "mobile";
+// 가로 기준 좌표 → 화면 좌표 (폰은 90도 돌려서 세로 트랙)
+const toView = (x, y) => vertical() ? [H - y, x] : [x, y];
+
+// 진짜 경마처럼: 진행도 p(바퀴 수)는 '제일 안쪽 레일' 기준 거리로 재요.
+// 그래서 코너에서 바깥으로 도는 말은 같은 속도로 달려도 손해를 봐요.
+const R0 = () => laneR(0);                       // 안쪽 레일 라인
+const PREF = () => 4*S + 2*Math.PI*R0();         // 안쪽 레일 한 바퀴 길이
+// 반지름 r(안쪽~바깥 위치)에서 진행도 p의 화면 좌표. 결승선 = 아래쪽 직선 가운데, 시계 반대 방향
+function pt(r, p){
+  const r0 = R0(), A = Math.PI * r0;
+  let d = (((p % 1) + 1) % 1) * PREF();
+  if (d < S) return [CX + d, CY + r];
+  d -= S;
+  if (d < A) { const t = Math.PI/2 - d/r0; return [CX + S + r*Math.cos(t), CY + r*Math.sin(t)]; }
+  d -= A;
+  if (d < 2*S) return [CX + S - d, CY - r];
+  d -= 2*S;
+  if (d < A) { const t = -Math.PI/2 - d/r0; return [CX - S + r*Math.cos(t), CY + r*Math.sin(t)]; }
+  d -= A; return [CX - S + d, CY + r];
+}
+// 지금 코너를 돌고 있는지
+function onCurve(p){
+  const A = Math.PI * R0(); let d = (((p % 1) + 1) % 1) * PREF();
+  return (d >= S && d < S + A) || (d >= 3*S + A && d < 3*S + 2*A);
+}
+let RFS = 30;   // 말(메뉴) 크기
+const laneR = i => RIN + LW * (i + 0.5);
+const oval = (R, attrs) => `<rect x="${CX-S-R}" y="${CY-R}" width="${2*S+2*R}" height="${2*R}" rx="${R}" ${attrs}/>`;
+
+function drawTrack(){
+  const n = racers.length;
+  LW = Math.min(34, (ROUT_MAX - RIN) / n);
+  ROUT = RIN + LW * n;
+  const v = vertical(), svg = $("svg");
+  svg.setAttribute("viewBox", v ? `0 0 ${H} ${W}` : `0 0 ${W} ${H}`);
+  // 레인 줄은 꾸미기용이에요. 메뉴들은 줄 상관없이 자유롭게 달려요
+  let lanes = "";
+  for (let i = 1; i < n; i++) lanes += oval(RIN + LW*i, `fill="none" stroke="#ffffff66" stroke-width="1.5" stroke-dasharray="10 8"`);
+  // 마구 깎은 잔디 줄무늬
+  let stripes = "";
+  for (let x = CX - S - RIN; x < CX + S + RIN; x += 60) stripes += `<rect x="${x}" y="${CY-RIN}" width="30" height="${2*RIN}" fill="#ffffff10"/>`;
+  const fy1 = CY + RIN, fy2 = CY + ROUT;
+  const [tx, ty] = toView(CX, CY);
+  svg.innerHTML = `
+    <defs>
+      <pattern id="chk" width="12" height="12" patternUnits="userSpaceOnUse">
+        <rect width="12" height="12" fill="#fff"/><rect width="6" height="6" fill="#222"/><rect x="6" y="6" width="6" height="6" fill="#222"/>
+      </pattern>
+      <linearGradient id="rainbow" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#ff5a5f"/><stop offset=".35" stop-color="#ffcc00"/><stop offset=".7" stop-color="#22c55e"/><stop offset="1" stop-color="#3b82f6"/>
+      </linearGradient>
+      <clipPath id="inClip">${oval(RIN-4, "")}</clipPath>
+    </defs>
+    <g transform="${v ? `matrix(0,1,-1,0,${H},0)` : ""}">
+      ${oval(ROUT+10, `fill="#ffffff"`)}
+      ${oval(ROUT+6, `fill="#b8794a"`)}
+      ${oval(ROUT, `fill="#c98b55"`)}
+      ${lanes}
+      ${oval(RIN, `fill="#ffffff"`)}
+      ${oval(RIN-4, `fill="#3f8f4f"`)}
+      <g clip-path="url(#inClip)">${stripes}</g>
+      <g id="wlayer">${weatherLayer()}</g>
+      <rect x="${CX-6}" y="${fy1}" width="12" height="${fy2-fy1}" fill="url(#chk)"/>
+      <rect x="${CX-2}" y="${fy2+6}" width="4" height="22" fill="#fff"/>
+    </g>
+    ${v
+      ? `<text x="${tx}" y="${ty - 150}" text-anchor="middle" font-size="40">🏇</text>
+         <text x="${tx}" y="${ty - 108}" text-anchor="middle" font-size="24" font-weight="900" fill="#ffffffb0">MENU DERBY</text>`
+      : `<text x="${tx}" y="${ty - 62}" text-anchor="middle" font-size="30" font-weight="900" fill="#ffffffb0">🏇 MENU DERBY</text>`}
+    <g id="items"></g>
+    <g id="horses"></g>
+    <g id="shots"></g>
+    <g id="fx"></g>`;
+  const fs = Math.max(20, Math.min(30, LW * 1.1)); RFS = fs;
+  const ids = racers.map((_, i) => i).sort((a, b) => (racers[a].fav ? 1 : 0) - (racers[b].fav ? 1 : 0));  // 응원하는 말은 맨 위에
+  $("horses").innerHTML = ids.map(i => { const r = racers[i]; return `
+    <g class="rc ${r.fav ? "fav" : cheer !== null ? "dim" : ""}" id="rc${i}">
+      ${r.fav ? `<circle r="${fs*0.95}" fill="#ffe17a55" stroke="#ffe17a" stroke-width="4" class="halo"/>
+      <g transform="translate(0,${-fs*1.35})"><rect x="-34" y="-13" width="68" height="24" rx="12" fill="#ffe17a"/>
+      <text text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="900" fill="#2b2118" y="-1">⭐ 내 응원</text></g>` : ""}
+      <circle r="${fs*0.58}" fill="${r.color}" stroke="#fff" stroke-width="3"/>
+      <text class="emo" text-anchor="middle" dominant-baseline="central" font-size="${fs}">${r.em}</text>
+      <text class="badge" x="${fs*0.6}" y="${-fs*0.5}" text-anchor="middle" dominant-baseline="central" font-size="${fs*0.6}"></text>
+    </g>`; }).join("");
+  racers.forEach((r, i) => { r.el = $("rc" + i); r.badge = r.el.querySelector(".badge"); });
+  renderBoxes();
+}
+function placeAll(){
+  // 앞서는 말이 위에 그려지게
+  racers.forEach((r, i) => {
+    const [x, y] = toView(...pt(r.rad, r.p));
+    r.el.setAttribute("transform", `translate(${x.toFixed(1)},${y.toFixed(1)})`);
+  });
+}
+function renderBoxes(){
+  const g = $("items"); if (!g) return;
+  const sz = Math.min(26, LW * 0.9), now = performance.now();
+  g.innerHTML = boxes.filter(b => now >= b.off).map(b => {
+    const [x, y] = toView(...pt(b.rad, b.pos));
+    return `<g transform="translate(${x.toFixed(1)},${y.toFixed(1)})"><g class="ibox">
+      <rect x="${-sz/2}" y="${-sz/2}" width="${sz}" height="${sz}" rx="6" fill="url(#rainbow)" stroke="#fff" stroke-width="2.5"/>
+      <text text-anchor="middle" dominant-baseline="central" font-size="${sz*0.7}" font-weight="900" fill="#fff">?</text></g></g>`;
+  }).join("");
+}
+// 상자 위치 정하기: 진행도 pos, 몇 번째 줄(slot)인지
+function placeBox(b, pos){
+  b.pos = pos ?? 0.06 + Math.random() * 0.88;     // 결승선 바로 앞뒤는 피해요
+  b.slot = Math.random() * racers.length | 0;
+  b.rad = laneR(b.slot);
+}
+function popFx(r, em){
+  const [x, y] = toView(...pt(r.rad, r.p));
+  const t = document.createElementNS(NS, "text");
+  t.setAttribute("x", x); t.setAttribute("y", y - 20); t.setAttribute("text-anchor", "middle");
+  t.setAttribute("font-size", r.fav ? "40" : "26"); t.setAttribute("class", "pop"); t.textContent = em;
+  $("fx").appendChild(t); setTimeout(() => t.remove(), 1000);
+}
+// 먹은 아이템 이름이 음식 위에 작게 떴다가 사라져요 (말을 따라 움직여요)
+function tagFx(r, text, small){
+  const t = document.createElementNS(NS, "text");
+  t.setAttribute("y", -RFS * (r.fav ? 2.15 : 1.05));
+  t.setAttribute("text-anchor", "middle");
+  t.setAttribute("font-size", small ? 12 : r.fav ? 19 : 15);
+  t.setAttribute("class", "tag");
+  t.textContent = text;
+  r.el.appendChild(t); setTimeout(() => t.remove(), 1600);
+}
+function useItem(r, rank, now, topP){
+  const f = racers.length > 1 ? rank / (racers.length - 1) : 0;
+  const ws = ITEMS.map(it => it.w(f)); let x = Math.random() * ws.reduce((a,b)=>a+b), k = 0;
+  while ((x -= ws[k]) > 0) k++;
+  const it = ITEMS[k], n = (r.fav ? "⭐ " : "") + r.name, loud = !!r.fav;
+  tagFx(r, `${it.em} ${it.name}!`);
+  Snd.item(it.em);
+  if (it.em === "🎯" || it.em === "💣") {
+    const st = standings(), myRank = st.indexOf(r);
+    const target = it.em === "💣" ? st[0] : st[myRank - 1];
+    if (!target || target === r) { say(`${it.em} ${n}, 미사일이… 허공으로 날아갑니다 ㅋㅋ`); return; }
+    shots.push({kind: it.em, from: r, target, p: r.p + 0.004, rad: r.rad, speed: it.em === "💣" ? 0.42 : 0.3, born: now});
+    Snd.launch();
+    say(it.em === "💣" ? `💣 1등 미사일 발사!!! 선두 ${target.name} 위험합니다!!` : `🎯 ${n}, 앞에 있는 ${target.name}에게 미사일 발사!`, true);
+    return;
+  }
+  if (it.em === "⚡") {
+    racers.forEach(o => { if (o !== r) { o.fx.push({kind:"⚡", t0:now, dur:it.dur}); tagFx(o, "감전!", true); } });
+    const z = document.createElement("div"); z.className = "zapfx"; document.querySelector(".stage").appendChild(z);
+    setTimeout(() => z.remove(), 600);
+    say(`⚡ ${n} 번개! 다른 메뉴들이 서서히 느려집니다!`, true);
+    return;
+  }
+  const fx = {kind:it.em, t0:now, dur:it.dur, self:true};
+  if (it.em === "🧲") fx.amt = Math.max(0.3, Math.min(1.2, (topP - r.p) * 12));
+  r.fx.push(fx);
+  const lines = {
+    "🚀": `🚀 ${n}, 부스터! 점점 빨라집니다!`,
+    "🧲": `🧲 ${n}, 자석으로 1등 쪽으로 끌려갑니다!`,
+    "🍌": `🍌 ${n}, 바나나 밟고 미끄러집니다~`,
+    "🐢": `🐢 ${n}, 거북이가 돼서 느려집니다…`,
+  };
+  say(lines[it.em], loud);
+}
+
+// AI: 앞쪽 일정 거리 안에 있고, 옆으로 움직여서 제때 닿을 수 있는 상자 중 제일 가까운 것
+const ITEM_COOL = 6000;   // 아이템 먹고 6초 동안은 다음 아이템 못 먹음
+function itemTarget(r, PR, claimed, busy, now){
+  if (now < (r.cool || 0)) return null;   // 쿨타임 중엔 상자 안 노려요
+  let best = null, bestD = Infinity;
+  const speed = Math.max(0.05, r.v) * PR;                       // 1초에 가는 거리
+  for (const b of boxes) {
+    if (now < b.off || claimed.has(b)) continue;
+    const d = ((((b.pos - r.p) % 1) + 1) % 1) * PR;             // 앞으로 남은 거리
+    if (d < 20 || d > (weather === "night" ? 120 : 260)) continue;   // 너무 가깝거나 멀면 패스 (밤엔 가까운 것만 보여요)
+    const sideTime = Math.abs(b.rad - r.rad) / 120;              // 옆으로 가는 데 걸리는 시간
+    if (sideTime > d / speed * 0.9) continue;                   // 제때 못 닿으면 패스
+    if (b.slot !== r.slot && busy(r, b.rad)) continue;          // 그 자리에 다른 말이 있으면 패스
+    if (d < bestD) { bestD = d; best = b; }
+  }
+  return best;
+}
+
+// 🎯💣 날아가는 미사일: 트랙을 따라 목표를 쫓아가서 맞으면 쾅!
+function updateShots(dt, now){
+  const g = $("shots"); if (!g) return;
+  for (const sh of shots) {
+    sh.p += sh.speed * dt;
+    sh.rad += (sh.target.rad - sh.rad) * Math.min(1, dt * 6);
+    if (sh.p >= sh.target.p || now - sh.born > 9000) {
+      sh.done = true;
+      if (sh.target.p >= LAPS) continue;                     // 이미 골인했으면 소용없음
+      const big = sh.kind === "💣";
+      sh.target.fx.push({kind:"💥", t0:now, dur: big ? 2400 : 2000, amt: big ? 0.85 : 0.7});
+      tagFx(sh.target, "💥 쾅!");
+      if (big) {   // 1등 미사일은 주변까지 폭발
+        racers.forEach(o => { if (o !== sh.target && Math.abs((o.p - sh.target.p) * PREF()) < 45) { o.fx.push({kind:"💥", t0:now, dur:1500, amt:0.5}); tagFx(o, "휘말림!", true); } });
+        const z = document.createElement("div"); z.className = "zapfx boom"; document.querySelector(".stage").appendChild(z); setTimeout(() => z.remove(), 600);
+      }
+      Snd.boom(big);
+      say(big ? `💥 쾅!!! 선두 ${sh.target.name} 1등 미사일 맞았습니다!!` : `💥 ${sh.target.name}, 미사일에 맞았습니다!`, true);
+    }
+  }
+  shots = shots.filter(sh => !sh.done);
+  g.innerHTML = shots.map(sh => {
+    const [x, y] = toView(...pt(sh.rad, sh.p));
+    return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle" dominant-baseline="central" font-size="${RFS * (sh.kind === "💣" ? 0.95 : 0.8)}" class="shot">${sh.kind === "💣" ? "💣" : "☄️"}</text>`;
+  }).join("");
+}
+
+function standings(){ return racers.slice().sort((a,b) => (a.place || 99) - (b.place || 99) || b.p - a.p); }
+// 결승선 통과! 1착·2착·3착 깃발
+const MEDAL = ["🥇", "🥈", "🥉"];
+function crossLine(r, now){
+  if (r.place) return;
+  r.place = ++placeN;
+  const medal = MEDAL[r.place - 1] || "🏁";
+  if (r.place === 1) {
+    firstCross = performance.now();
+    const rest = racers.filter(o => o !== r).sort((a, b) => b.p - a.p);
+    crossInfo = {frame: tapeShift + tape.length, margin: rest.length ? (r.p - rest[0].p) * 40 : 9};
+    // 📸 사진 판독감이면 결과를 숨겨요 (리플레이 볼 때까지 아무도 몰라야 재밌으니까)
+    photoPending = crossInfo.margin < 0.5;
+    if (photoPending) {
+      $("rank").style.visibility = "hidden";
+      say("결승선 통과!!! 누가 먼저인가요?!", true);
+    } else {
+      r.el.classList.add("win");
+      say(`🏁 1착 ${r.name}!!! 결승선 통과!`, true);
+    }
+  } else if (photoPending) {
+    if (r.place === 2) say("거의 동시에 들어왔습니다!! 📸 판독이 필요합니다!", true);
+  } else if (r.place <= 3) say(`${medal} ${r.place}착은 ${r.name}!`, true);
+  Snd.ding(photoPending ? 2 : r.place);
+  if (!photoPending) showMedal(r);
+}
+// 말 옆에 메달을 계속 달아 둬요
+function showMedal(r){
+  if (r.el.querySelector(".medal")) return;
+  const medal = MEDAL[r.place - 1] || "🏁";
+  const t = document.createElementNS(NS, "text");
+  t.setAttribute("x", -RFS * 0.62); t.setAttribute("y", -RFS * 0.5); t.setAttribute("text-anchor", "middle");
+  t.setAttribute("dominant-baseline", "central"); t.setAttribute("font-size", RFS * 0.75); t.setAttribute("class", "medal");
+  t.textContent = medal; r.el.appendChild(t);
+  tagFx(r, `${medal} ${r.place}착!`);
+  renderRank();
+}
+// 순위 옆 ▲▼ 표시 + 선두와의 거리 ('마신' = 말 한 마리 길이, 한 바퀴 ≈ 40마신으로 계산)
+function renderRank(){
+  if (photoPending) return;
+  const st = standings(), now = performance.now(), lead = st[0].p;
+  $("rank").innerHTML = st.map((r, k) => {
+    if (r.rk !== undefined && r.rk !== k) { r.trend = k < r.rk ? "up" : "down"; r.trendT = now + 1500; }
+    r.rk = k;
+    const tr = now < (r.trendT || 0) ? `<span class="tr ${r.trend}">${r.trend === "up" ? "▲" : "▼"}</span>` : "";
+    const g = (lead - r.p) * 40, gap = r.place ? `${MEDAL[r.place-1] || ""}${r.place}착` : k === 0 ? "선두" : g < 0.05 ? "나란히" : `-${g.toFixed(1)}`;
+    return `<div class="ri ${r.fav ? "me" : ""}"><span class="no">${k+1}</span><span class="dot" style="background:${r.color}"></span>${r.em}<span class="nm">${r.fav ? "⭐ " : ""}${esc(r.name)}</span>${tr}<span class="gap">${gap}</span></div>`;
+  }).join("");
+}
+
+/* ---------- 중계 ---------- */
+let lastMsg = 0;
+// 이름 받침에 맞게 조사 고치기: 짜장면이 / 피자가, 짬뽕은 / 피자는
+function josa(text){
+  const has = ch => { const c = ch.charCodeAt(0) - 0xAC00; return c >= 0 && c <= 11171 && c % 28 !== 0; };
+  return text.replace(/(.)(이\(가\)|은\(는\)|을\(를\)|과\(와\))/g, (m, ch, j) => {
+    const b = has(ch), map = {"이(가)": b ? "이" : "가", "은(는)": b ? "은" : "는", "을(를)": b ? "을" : "를", "과(와)": b ? "과" : "와"};
+    return ch + map[j];
+  });
+}
+function say(text, force){
+  const now = performance.now();
+  if (!force && now - lastMsg < 1600) return;
+  lastMsg = now;
+  text = josa(text);
+  const m = $("msg"); m.textContent = text;
+  m.classList.remove("flash"); void m.offsetWidth; m.classList.add("flash");
+}
+
+
+const pick = a => a[Math.random()*a.length|0];
+const LEAD = [n=>`${n}, 선두로 치고 나갑니다!`, n=>`${n}! 앞으로 튀어나옵니다!`, n=>`이번엔 ${n}이(가) 1등!`, n=>`${n}, 역전입니다!!`];
+const MARKS = [
+  [0.15, () => "첫 번째 코너를 돕니다!"],
+  [0.5,  () => "건너편 직선 주로! 아직 초반입니다!"],
+  [1.0,  n => `2바퀴째로 들어갑니다! 선두는 ${n}!`, true],
+  [1.5,  () => "중반 레이스! 아직 승부는 모릅니다!"],
+  [1.8,  n => `${n}, 이대로 굳히기 들어가나요?`],
+  [2.0,  n => `🔔 마지막 바퀴!! 현재 선두는 ${n}!`, true],
+  [2.3,  () => "마지막 바퀴 첫 코너! 아직 아무도 모릅니다!"],
+  [2.55, n => `건너편 직선! ${n} 앞서 갑니다!`],
+  [2.75, () => "마지막 코너!! 자리 싸움이 치열합니다!", true],
+  [2.88, n => `직선 주로! 결승선이 보입니다! 선두는 ${n}!!`, true],
+];
+
+/* ---------- 소리 (파일 없이 코드로 만든 배경 음악 + 효과음) ---------- */
+const Snd = (() => {
+  let ac = null, master = null, noiseBuf = null, timer = 0, stepN = 0, nextT = 0, bpm = 150;
+  let muted = load("mr_mute", false);
+  // 8분음표 32칸 (4마디). 0 = 쉼표. 신나는 경마 행진곡 느낌
+  const MEL  = [72,0,76,0,79,0,76,0, 77,0,81,0,79,77,76,74, 72,0,76,0,79,0,84,0, 83,81,79,77,76,74,72,0];
+  const MEL2 = [84,0,83,0,81,0,79,0, 77,0,79,0,81,0,77,0, 76,0,79,0,84,0,88,0, 86,84,83,81,79,77,79,0];
+  const BASS = [48,0,55,0,48,0,55,0, 53,0,60,0,53,0,60,0, 48,0,55,0,48,0,55,0, 43,0,50,0,43,0,47,0];
+  const hz = m => 440 * Math.pow(2, (m - 69) / 12);
+  let part = 0;
+  function init(){
+    try {
+      if (!ac) {
+        ac = new (window.AudioContext || window.webkitAudioContext)();
+        master = ac.createGain(); master.gain.value = muted ? 0 : 0.7; master.connect(ac.destination);
+        noiseBuf = ac.createBuffer(1, ac.sampleRate, ac.sampleRate);
+        const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+      }
+      if (ac.state === "suspended") ac.resume();
+    } catch(e){ ac = null; }
+  }
+  function tone(f1, f2, dur, type, vol, at){
+    if (!ac) return;
+    const t = at ?? ac.currentTime, o = ac.createOscillator(), g = ac.createGain();
+    o.type = type; o.frequency.setValueAtTime(f1, t); o.frequency.exponentialRampToValueAtTime(f2, t + dur);
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g).connect(master); o.start(t); o.stop(t + dur + 0.02);
+  }
+  function hold(f, dur, vol){
+    if (!ac) return;
+    const t = ac.currentTime, g = ac.createGain();
+    // 부드러운 사인파 + 은은한 한 옥타브 아래 소리, 날카로운 고음은 걸러요
+    const lp = ac.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 2200;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(vol, t + 0.04);
+    g.gain.setValueAtTime(vol, t + dur * 0.6);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    g.connect(lp).connect(master);
+    for (const [type, mult, v] of [["sine", 1, 1], ["sine", 0.5, 0.35], ["triangle", 1, 0.15]]) {
+      const o = ac.createOscillator(), og = ac.createGain();
+      o.type = type; o.frequency.value = f * mult; og.gain.value = v;
+      o.connect(og).connect(g); o.start(t); o.stop(t + dur + 0.02);
+    }
+  }
+  function noise(dur, freq, vol, type, at){
+    if (!ac) return;
+    const t = at ?? ac.currentTime, s = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain();
+    s.buffer = noiseBuf; f.type = type; f.frequency.value = freq;
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    s.connect(f).connect(g).connect(master); s.start(t, Math.random() * 0.5); s.stop(t + dur + 0.02);
+  }
+  function playStep(i, t){
+    const mel = (part ? MEL2 : MEL)[i], len = 60 / bpm / 2;
+    if (mel) tone(hz(mel), hz(mel), len * 0.9, "square", 0.04, t);
+    if (BASS[i]) tone(hz(BASS[i]), hz(BASS[i]), len * 1.6, "triangle", 0.13, t);
+    if (i % 4 === 0) tone(140, 45, 0.14, "sine", 0.3, t);              // 쿵
+    if (i % 4 === 2) noise(0.09, 1800, 0.08, "bandpass", t);           // 탁
+    noise(0.025, 8000, 0.03, "highpass", t);                           // 치
+  }
+  function sched(){
+    while (nextT < ac.currentTime + 0.15) {
+      playStep(stepN, nextT);
+      nextT += 60 / bpm / 2;
+      stepN = (stepN + 1) % 32;
+      if (stepN === 0) part = 1 - part;
+    }
+  }
+  return {
+    init,
+    get muted(){ return muted; },
+    toggle(){ muted = !muted; save("mr_mute", muted); if (master) master.gain.value = muted ? 0 : 0.7; return muted; },
+    // 해설이 말할 땐 음악 소리를 살짝 줄여요
+    duck(d){ if (master && !muted) master.gain.setTargetAtTime(d ? 0.3 : 0.7, ac.currentTime, 0.15); },
+    // 따아~ 따아~ 따아~ 따아아아!! (길게 눌러 주는 소리)
+    count(){ hold(523, 0.6, 0.22); },              // 도~
+    go(){ hold(1046, 1.1, 0.22); hold(784, 1.1, 0.1); },   // 높은 도~ (솔이랑 화음)
+    music(){ if (!ac) return; clearInterval(timer); bpm = 150; stepN = 0; part = 0; nextT = ac.currentTime + 0.05; timer = setInterval(sched, 25); },
+    faster(){ bpm = 176; },
+    lap(){ if (ac) tone(1046, 1040, 0.35, "sine", 0.1, ac.currentTime); },
+    ding(place){ if (!ac) return; const f = [1568, 1318, 1046][place - 1] || 880, t = ac.currentTime; tone(f, f, 0.6, "sine", 0.18, t); tone(f * 1.5, f * 1.5, 0.4, "sine", 0.06, t); },
+    cheer(){ if (!ac) return; const t = ac.currentTime; noise(0.35, 1200, 0.12, "bandpass", t); tone(700, 1000, 0.15, "triangle", 0.06, t); },
+    bell(){ if (!ac) return; for (let i = 0; i < 3; i++) tone(1320, 1300, 0.5, "sine", 0.12, ac.currentTime + i * 0.22); },
+    item(em){
+      if (!ac) return; const t = ac.currentTime;
+      tone(1046, 1046, 0.07, "square", 0.06, t); tone(1568, 1568, 0.1, "square", 0.06, t + 0.07);
+      if (em === "🚀") tone(200, 1200, 0.9, "sawtooth", 0.06, t + 0.12);
+      if (em === "🧲") { tone(400, 800, 0.4, "sine", 0.1, t + 0.12); tone(400, 800, 0.4, "sine", 0.08, t + 0.4); }
+      if (em === "⚡") { noise(0.4, 3000, 0.25, "highpass", t + 0.1); tone(1500, 90, 0.5, "square", 0.07, t + 0.1); }
+      if (em === "🍌") tone(900, 150, 0.7, "triangle", 0.15, t + 0.1);
+      if (em === "🐢") tone(300, 90, 0.9, "triangle", 0.15, t + 0.1);
+    },
+    finish(){
+      clearInterval(timer); if (!ac) return; const t = ac.currentTime + 0.05;
+      [523, 659, 784, 1046].forEach((f, i) => tone(f, f, i === 3 ? 0.9 : 0.16, "square", 0.08, t + i * 0.14));
+      [659, 784, 1046, 1318].forEach((f, i) => tone(f, f, i === 3 ? 0.9 : 0.16, "triangle", 0.07, t + i * 0.14));
+      noise(1.6, 1000, 0.15, "bandpass", t);   // 와아~
+    },
+    stop(){ clearInterval(timer); },
+    launch(){ if (!ac) return; const t = ac.currentTime; noise(0.6, 1800, 0.2, "bandpass", t); tone(300, 1600, 0.5, "sawtooth", 0.05, t); },
+    boom(big){ if (!ac) return; const t = ac.currentTime; noise(big ? 1.2 : 0.6, 400, big ? 0.6 : 0.4, "lowpass", t); tone(120, 35, big ? 0.9 : 0.5, "sine", 0.35, t); },
+    shutter(){ if (!ac) return; const t = ac.currentTime; noise(0.05, 3000, 0.25, "highpass", t); noise(0.07, 1500, 0.2, "bandpass", t + 0.08); }
+  };
+})();
+function renderMute(){
+  $("muteBtn").textContent = Snd.muted ? "🔇" : "🔊";
+}
+
+$("muteBtn").onclick = () => { Snd.init(); Snd.toggle(); renderMute(); };
+renderMute();
+
+/* ---------- 응원할 메뉴 고르기 ---------- */
+let lastCheer = load("mr_cheer", null);
+function askCheer(){
+  return new Promise(res => {
+    const box = $("cheerPick");
+    $("cheerList").innerHTML = racers.map((r, i) =>
+      `<button class="cp ${r.name === lastCheer ? "on" : ""}" data-i="${i}"><span class="dot" style="background:${r.color}"></span>${r.em} ${esc(r.name)}</button>`).join("");
+    box.hidden = false;
+    $("cheerList").onclick = e => { const b = e.target.closest(".cp"); if (!b) return; box.hidden = true; res(+b.dataset.i); };
+    $("cheerSkip").onclick = () => { box.hidden = true; res(null); };
+  });
+}
+
+/* ---------- 🌦️ 날씨 ---------- */
+const WEATHER = {
+  sun:   {em:"☀️", name:"맑음",     desc:"최고의 컨디션! 실력 대결입니다!", w:30},
+  rain:  {em:"🌧️", name:"비",       desc:"물웅덩이와 미끄러운 코너 조심!", w:25},
+  night: {em:"🌙", name:"야간 경기", desc:"어두워서 상자가 가까이 와야 보여요!", w:25},
+  wind:  {em:"💨", name:"강풍",     desc:"아래쪽 직선은 순풍, 위쪽 직선은 맞바람!", w:20},
+};
+function rollWeather(){
+  if (!weatherOn) return "sun";
+  let x = Math.random() * 100;
+  for (const [k, v] of Object.entries(WEATHER)) if ((x -= v.w) < 0) return k;
+  return "sun";
+}
+function renderWeatherSw(){ $("weatherSw").classList.toggle("on", weatherOn); }
+$("weatherSw").onclick = () => { weatherOn = !weatherOn; save("mr_weather", weatherOn); renderWeatherSw(); };
+renderWeatherSw();
+// 트랙 어느 구간인지: B 아래 직선(→), R 오른쪽 코너, T 위 직선(←), L 왼쪽 코너
+function seg(p){
+  const A = Math.PI * R0(); const d = (((p % 1) + 1) % 1) * PREF();
+  return d < S ? "B" : d < S + A ? "R" : d < 3*S + A ? "T" : d < 3*S + 2*A ? "L" : "B";
+}
+function inPuddle(r){
+  const PR = PREF();
+  return puddles.some(pd => Math.abs(pd.rad - r.rad) < LW * 1.2 && Math.abs(((((r.p - pd.pos) % 1) + 1.5) % 1 - 0.5) * PR) < LW * 1.3);
+}
+function weatherLayer(){
+  // 트랙 좌표계(가로 기준) 안에 그리는 날씨 장식
+  if (weather === "rain") return puddles.map(pd => {
+    const [x, y] = pt(pd.rad, pd.pos);
+    return `<ellipse cx="${x}" cy="${y}" rx="${LW*1.5}" ry="${LW*1.05}" fill="#3d7fb3" opacity=".55"/><ellipse cx="${x-4}" cy="${y-3}" rx="${LW*0.7}" ry="${LW*0.3}" fill="#bfe3ff" opacity=".5"/>`;
+  }).join("");
+  if (weather === "wind") {
+    let l = "";
+    for (let k = 0; k < 14; k++) {
+      const y = 20 + k * 44 + (k % 2) * 12;
+      l += `<line x1="0" x2="${W}" y1="${y}" y2="${y}" class="windline" style="animation-delay:-${(k*0.37)%2}s"/>`;
+    }
+    return l + `<text x="${CX}" y="${CY + ROUT + 34}" text-anchor="middle" font-size="22" font-weight="900" fill="#fff" opacity=".85">순풍 ➜➜</text>
+      <text x="${CX}" y="${CY - ROUT - 16}" text-anchor="middle" font-size="22" font-weight="900" fill="#fff" opacity=".85">⬅ 맞바람</text>`;
+  }
+  return "";
+}
+function weatherMult(r){
+  if (weather === "wind") { const g = seg(r.p); return g === "B" ? 1.12 : g === "T" ? 0.9 : 1; }
+  if (weather === "rain") return inPuddle(r) ? 0.78 : 0.97;
+  return 1;
+}
+
+/* ---------- 경주 ---------- */
+const LAPS = 3;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+async function startRace(){
+  if (racing || runners.length < 2) return;
+  racing = true;
+  Snd.init(); Snd.stop();
+  $("modal").hidden = true;
+  $("race").hidden = false;
+  document.body.style.overflow = "hidden";
+  $("exitBtn").disabled = true;
+  $("lap").textContent = `LAP 1/${LAPS}`; $("lap").classList.remove("final");
+  try { wake = await navigator.wakeLock.request("screen"); } catch(e){ wake = null; }   // 경주 중 화면 꺼짐 방지
+  cheer = null; weather = "sun"; puddles = []; $("wBadge").textContent = "";
+  $("race").classList.remove("w-sun", "w-rain", "w-night", "w-wind"); $("podium").hidden = true;
+  // 🎲 게이트 추첨: 누가 안쪽에서 출발할지 매번 랜덤 → 길게 보면 모두에게 공평
+  const gates = shuffle(runners.map((_, i) => i));
+  racers = runners.map((r, i) => ({...r, color: COLORS[i], p:0, v:0, target:0, fx:[], fav:false, gate: gates[i], slot: gates[i], rad: 0,
+    // 말마다 좋아하는 자리가 달라요 (레일 붙기 좋아하는 말, 한두 칸 밖에서 달리는 말) → 2~3줄로 뭉쳐 달려요
+    pref: Math.min(runners.length - 1, pick([0, 0, 1, 1, 2])), prefT: 0}));
+  boxes = [];
+  drawTrack();
+  racers.forEach(r => r.rad = laneR(r.slot));
+  placeAll(); renderRank();
+  $("msg").hidden = true;
+
+  cheer = await askCheer();
+  if (cheer !== null) { racers[cheer].fav = true; lastCheer = racers[cheer].name; save("mr_cheer", lastCheer); }
+  if (itemsOn) {
+    // 레인마다 상자 하나씩 한 줄 + 보너스 2개 (먹으면 3초 뒤 다시 생겨요)
+    // 상자를 트랙 곳곳에 흩어 놓아요 (먹으면 4.5초 뒤 다른 곳에 다시 생겨요)
+    const nb = Math.max(5, racers.length + 1);
+    for (let k = 0; k < nb; k++) { const b = {off: 0}; placeBox(b, 0.06 + (k + 0.15 + Math.random() * 0.7) * (0.88 / nb)); boxes.push(b); }
+  }
+  drawTrack(); placeAll(); renderRank();
+  weather = rollWeather();
+  puddles = weather === "rain" ? [0.18, 0.42, 0.66, 0.86].map(pos => ({pos: pos + (Math.random() - 0.5) * 0.06, rad: laneR(Math.random() * racers.length | 0)})) : [];
+  const raceEl = $("race"); raceEl.classList.remove("w-sun", "w-rain", "w-night", "w-wind"); raceEl.classList.add("w-" + weather);
+  $("wBadge").textContent = `${WEATHER[weather].em} ${WEATHER[weather].name}`;
+  drawTrack(); placeAll();
+  const inner = racers.find(r => r.gate === 0);
+  say(`🎲 게이트 추첨! 제일 안쪽 1번 게이트는 ${inner.em} ${inner.name}!`, true);
+  await sleep(1600);
+  say(`${WEATHER[weather].em} 오늘의 날씨: ${WEATHER[weather].name}! ${WEATHER[weather].desc}`, true);
+  await sleep(1900);
+
+  const c = $("count"); c.hidden = false; $("msg").hidden = true;
+  for (const n of ["3","2","1","GO!"]) {
+    c.textContent = n; c.classList.toggle("go", n === "GO!");
+    c.classList.remove("pop"); void c.offsetWidth; c.classList.add("pop");
+    n === "GO!" ? Snd.go() : Snd.count();
+    await sleep(n === "GO!" ? 800 : 1000);
+  }
+  c.hidden = true; $("msg").hidden = false;
+  say(cheer !== null ? `출발!! ⭐ ${racers[cheer].name} 화이팅!` : "출발했습니다!!", true);
+  $("svg").classList.add("running");
+  raceStart = performance.now();
+  Snd.music();
+
+  tape = []; tapeShift = 0; shots = []; placeN = 0; firstCross = 0; crossInfo = null; photoPending = false; $("shots") && ($("shots").innerHTML = "");
+  let favLeadT = -1e9, spurtSet = false, laneT = 0, last = performance.now(), retarget = 0, leader = -1, rankT = 0, mark = 0, slowSaid = false, boxT = 0;
+  const step = now => {
+    let dt = Math.min(0.05, (now - last) / 1000); last = now;
+    const order = racers.map((r,i)=>i).sort((a,b)=>racers[b].p - racers[a].p);
+    const top = racers[order[0]].p;
+    // 결승 직전 + 1·2등이 붙어 있으면 슬로모션 (모두에게 똑같이 적용)
+    // 🎬 하이라이트 슬로모션: 결승 직선에 들어오면 (접전이면 더 일찍) 걸리고, 한 번 걸리면 결승까지 쭉
+    const gap12 = top - racers[order[1]].p;
+    if (!slowSaid && ((top > LAPS - 0.2 && gap12 < 0.07) || top > LAPS - 0.13)) {
+      slowSaid = true; $("race").classList.add("slow");
+      say(gap12 < 0.07 ? "접전입니다!! 슬로모션으로 보시죠!!" : "마지막 직선!! 슬로모션으로 보시죠!!", true);
+    }
+    if (slowSaid) dt *= 0.3;
+    retarget -= dt; rankT -= dt; boxT -= dt;
+    if (!spurtSet && top > LAPS - 0.3) {
+      spurtSet = true;
+      racers.forEach(r => r.spurt = 0.88 + Math.random() * 0.4);   // 남은 힘은 랜덤
+      const best = racers.reduce((a, b) => a.spurt > b.spurt ? a : b);
+      say(`💨 ${best.name}, 엄청난 막판 스퍼트!!`, true);
+    }
+    if (retarget <= 0) {
+      retarget = 0.35;
+      // 모든 메뉴에 똑같은 규칙 → 우승 확률은 모두 같아요
+      order.forEach((idx, rank) => {
+        let t = 0.07 + Math.random() * 0.06;               // 한 바퀴 약 10초, 세 바퀴 약 30초
+        if (top > 0.45) t *= 0.92 + (rank / (racers.length - 1)) * 0.2;  // 뒤쪽이 조금 더 힘을 내서 역전 연출
+        const r = racers[idx], gap = top - r.p, fin = top > LAPS - 1;
+        t *= 1 + Math.min(fin ? 0.45 : 0.2, gap * (fin ? 2.2 : 1.2));      // 멀리 뒤처질수록 따라붙는 힘 (마지막 바퀴엔 더 세게)
+        if (fin && rank === 0) t *= 0.96;                   // 마지막 바퀴 선두는 바람 맞으며 지쳐요
+        if (top > LAPS - 0.3) t *= r.spurt || 1;            // 막판 스퍼트 (누가 힘이 남았을까?)
+        if (Math.random() < 0.05) t *= 1.4;                 // 가끔 깜짝 스퍼트
+        racers[idx].target = t;
+      });
+    }
+    // 자리 잡기: 앞이 비면 안쪽 레일로 파고들고, 앞이 막히면 바깥으로 빠져서 추월해요
+    laneT -= dt;
+    if (laneT <= 0) {
+      laneT = 0.2;
+      const PR = PREF(), taken = [], claimed = new Set();
+      const busy = (r, rad) => racers.some(o => o !== r && Math.abs((o.p - r.p) * PR) < 34 && Math.abs(o.rad - rad) < LW * 0.85)
+                            || taken.some(t => Math.abs(t.p - r.p) * PR < 34 && Math.abs(t.rad - rad) < LW * 0.85);
+      for (const idx of order) {
+        const r = racers[idx];
+        if (r.place) { r.slot = racers.length - 1; continue; }   // 골인한 말은 바깥으로 빠져서 천천히
+        if (weather === "rain" && onCurve(r.p) && Math.random() < 0.02) {   // 🌧️ 빗길 코너에서 미끄덩
+          r.fx.push({kind:"💦", t0:now, dur:1000}); tagFx(r, "💦 미끄덩!", true);
+        }
+        const ahead = racers.some(o => o !== r && (o.p - r.p) * PR > 0 && (o.p - r.p) * PR < 70 && Math.abs(o.rad - r.rad) < LW * 0.8);
+        let want = r.slot, tgt = null;
+        if (ahead) {
+          // 막혔다! 가까운 빈자리로 (바깥 먼저 보고, 안쪽도 비었으면 안쪽)
+          for (let d = 1; d < racers.length; d++) {
+            if (r.slot + d < racers.length && !busy(r, laneR(r.slot + d))) { want = r.slot + d; break; }
+            if (r.slot - d >= 0 && !busy(r, laneR(r.slot - d))) { want = r.slot - d; break; }
+          }
+          if (want > r.slot && r.fav) say(`⭐ ${r.name}, 바깥으로 빠져서 추월 시도!`);
+        } else if (itemsOn && (tgt = itemTarget(r, PR, claimed, busy, now))) {
+          // 🎯 가까이에 갈 수 있는 상자가 있으면 그쪽으로!
+          want = tgt.slot; claimed.add(tgt);
+          if (r.fav && want !== r.slot) say(`⭐ ${r.name}, ❓ 상자를 노립니다!`);
+        } else if (r.slot > r.pref && !busy(r, laneR(r.slot - 1))) {
+          want = r.slot - 1;   // 앞이 비었으면 한 칸씩 안쪽 레일로
+          if (want === 0 && r.fav) say(`⭐ ${r.name}, 안쪽 레일을 파고듭니다!`);
+        }
+        r.slot = want;
+        if ((r.prefT -= 0.2) <= 0) { r.prefT = 3 + Math.random() * 4; r.pref = Math.min(racers.length - 1, pick([0, 0, 1, 1, 2])); }
+        taken.push({p: r.p, rad: laneR(want)});
+      }
+    }
+    let boxChanged = false;
+    const PR = PREF(), moved = new Set();
+    order.forEach(i => {
+      const r = racers[i];
+      r.v += (r.target - r.v) * Math.min(1, dt * 3);
+      // 아이템 효과: 서서히 세졌다가 서서히 풀려요
+      let m = 1, badge = "", spin = false, zap = false;
+      r.fx = r.fx.filter(f => now - f.t0 < f.dur);
+      for (const f of r.fx) {
+        const e = env((now - f.t0) / f.dur);
+        if (f.kind === "🚀") m *= 1 + 0.7 * e;
+        if (f.kind === "🧲") m *= 1 + f.amt * e;
+        if (f.kind === "🐢") m *= 1 - 0.5 * e;
+        if (f.kind === "🍌") { m *= 1 - 0.7 * e; spin = e > 0.25; }
+        if (f.kind === "⚡") { m *= 1 - 0.45 * e; zap = true; }
+        if (f.kind === "💥") { m *= 1 - f.amt * e; spin = e > 0.2; }
+        if (f.kind === "💦") { m *= 1 - 0.45 * e; spin = e > 0.3; }
+        badge = f.kind;
+      }
+      r.el.classList.toggle("spin", spin);
+      r.el.classList.toggle("zapped", zap);
+      // 옆으로 이동 (천천히)
+      const tr = laneR(r.slot), lat = 120 * dt;
+      r.rad += Math.max(-lat, Math.min(lat, tr - r.rad));
+      // 코너에서 바깥에 있으면 같은 속도라도 돌아가는 거리가 길어서 손해
+      const curveLoss = onCurve(r.p) ? R0() / r.rad : 1;
+      // 바로 뒤에 붙어 달리면 바람을 덜 맞아서 살짝 빨라져요 (슬립스트림)
+      const draft = racers.some(o => o !== r && (o.p - r.p) * PR > 20 && (o.p - r.p) * PR < 90 && Math.abs(o.rad - r.rad) < LW * 1.6) ? 1.08 : 1;
+      m *= draft * weatherMult(r);
+      const prev = r.p;
+      if (r.place) {   // 골인 후엔 천천히 속도를 줄여요
+        r.v *= Math.max(0, 1 - dt * 0.7);
+        r.p += r.v * dt * curveLoss; moved.add(r);
+        if (r.badge.textContent !== badge) r.badge.textContent = badge;
+        return;
+      }
+      let np = r.p + r.v * m * dt * curveLoss;
+      // 바로 앞에 말이 있으면 뚫고 지나갈 수 없어요
+      for (const o of racers) {
+        if (o === r || o.place || !moved.has(o) || o.p <= r.p || Math.abs(o.rad - r.rad) >= LW * 0.75) continue;
+        np = Math.min(np, Math.max(r.p, o.p - 26 / PR));
+      }
+      r.p = np; moved.add(r);
+      if (r.p >= LAPS) crossLine(r, now);
+      for (const bx of boxes) {
+        if (!r.place && now >= (r.cool || 0) && Math.abs(bx.rad - r.rad) < LW * 0.6 && now >= bx.off && Math.floor(prev - bx.pos) < Math.floor(r.p - bx.pos) && r.p < LAPS - 0.05) {
+          bx.off = now + 4500; boxChanged = true; placeBox(bx);
+          r.cool = now + ITEM_COOL;   // 한 번 먹으면 한동안 상자를 못 먹어요 (그냥 지나가요)
+          useItem(r, order.indexOf(i), now, top); break;
+        }
+      }
+      if (r.badge.textContent !== badge) r.badge.textContent = badge;
+    });
+    if (boxT <= 0) { boxT = 0.3; boxChanged = true; }
+    if (boxChanged) renderBoxes();
+    placeAll();
+    // 📼 리플레이용 녹화 (마지막 몇 초만 기억)
+    tape.push(racers.map(r => [r.p, r.rad])); if (tape.length > 600) { tape.shift(); tapeShift++; }
+    updateShots(dt, now);
+    if (rankT <= 0) { rankT = 0.25; renderRank(); }
+
+    const lead = order[0];
+    if (lead !== leader && !firstCross && top < LAPS - 0.05) {   // 결승 직전엔 누가 앞인지 말 안 해요 (판독 긴장감)
+      if (leader !== -1 && top > 0.05) {
+        if (racers[lead].fav && now - favLeadT > 6000) { favLeadT = now; say(`⭐ 내가 응원하는 ${racers[lead].name}, 1등으로 올라섭니다!!`, true); }
+        else if (!racers[lead].fav) say(pick(LEAD)(racers[lead].name));
+      }
+      leader = lead;
+    }
+    if (!firstCross && mark < MARKS.length && top > MARKS[mark][0]) {
+      const [at, fn, force] = MARKS[mark];
+      if (!slowSaid) say(fn(racers[lead].name), !!force);
+      if (at % 1 === 0) $("lap").textContent = `LAP ${at + 1}/${LAPS}`;
+      if (at === LAPS - 1) { Snd.bell(); Snd.faster(); $("lap").classList.add("final"); } else if (at % 1 === 0) Snd.lap();
+      mark++;
+    }
+    // 🏁 3착까지 들어오면(또는 1착 뒤 5초가 지나면) 경주 끝
+    if (placeN >= Math.min(3, racers.length) || (firstCross && performance.now() - firstCross > 5000)) return finish(standings());
+    raf = requestAnimationFrame(step);
+  };
+  raf = requestAnimationFrame(step);
+}
+
+async function finish(order){
+  const w = order[0], secs = ((performance.now() - raceStart) / 1000).toFixed(1);
+  try { navigator.vibrate && navigator.vibrate([80, 60, 160]); } catch(e){}
+  try { wake && wake.release(); } catch(e){}
+  $("svg").classList.remove("running");
+  $("race").classList.remove("slow");
+  const margin = crossInfo ? crossInfo.margin : 9;   // 1착이 들어올 때 2등과의 차이 (마신)
+  const photo = order.length > 1 && margin < 0.5;
+  if (photo) {
+    say("간발의 차이!! 📸 사진 판독 들어갑니다!", true);
+    await sleep(700);
+    await photoReplay(order, margin);
+  }
+  // 이제 공개! 메달 달고 순위표 보여 주기
+  photoPending = false;
+  $("rank").style.visibility = "";
+  racers.filter(r => r.place).forEach(showMedal);
+  w.el.classList.add("win");
+  renderRank();
+  Snd.finish();
+  say(`🏆 ${w.name} 우승!!! 오늘의 메뉴는 ${w.name}입니다!`, true);
+  await podium(order);
+  racing = false;
+  $("exitBtn").disabled = false;
+  $("wEm").textContent = w.em; $("wNm").textContent = w.name;
+  $("order").innerHTML = (photo ? `<div class="photo">📸 사진 판독 끝에 우승!</div>` : "") +
+    `<div class="full">${order.slice(1).map((r,i) => `<span>${i+2}등 ${r.em} ${esc(r.name)}${r.fav ? " ⭐" : ""}</span>`).join("")}</div>` +
+    `<div class="time">⏱️ ${LAPS}바퀴 기록 ${secs}초</div>`;
+  lastOrder = order;
+  const fav = racers.find(r => r.fav);
+  $("cheerRes").hidden = !fav;
+  if (fav) $("cheerRes").textContent = josa(fav === w ? `🎉 응원 성공! ⭐ ${fav.name}이(가) 이겼어요!` : `😢 응원한 ${fav.name}은(는) ${order.indexOf(fav) + 1}등…`);
+  $("rCopy").textContent = "📋 결과 복사";
+  $("modal").hidden = false;
+  confetti();
+}
+
+/* ---------- 🏆 시상식 ---------- */
+async function podium(order){
+  const top3 = order.slice(0, 3), cols = [top3[1], top3[0], top3[2]];   // 2등-1등-3등 순서로 세워요
+  $("pods").innerHTML = cols.map(r => {
+    if (!r) return `<div class="pcol empty"></div>`;
+    const k = order.indexOf(r) + 1;
+    return `<div class="pcol p${k}">
+      <div class="pem">${r.em}</div>
+      <div class="pname">${r.fav ? "⭐ " : ""}${esc(r.name)}</div>
+      <div class="pblock" style="--c:${r.color}"><span class="pm">${MEDAL[k-1]}</span><span class="pk">${k}</span></div>
+    </div>`;
+  }).join("");
+  $("podium").hidden = false; $("msg").hidden = true;
+  confetti();
+  await sleep(3600);
+  $("podium").hidden = true; $("msg").hidden = false;
+}
+
+/* ---------- 📸 사진 판독 리플레이 (중계 화면처럼 확대해서 다시 보기) ---------- */
+const marginWord = m => m < 0.1 ? "코 차이" : m < 0.25 ? "머리 차이" : m < 0.4 ? "목 차이" : "반 마신 차이";
+function setVB(b){ $("svg").setAttribute("viewBox", b.map(x => x.toFixed(1)).join(" ")); }
+async function zoomVB(from, to, ms){
+  const t0 = performance.now();
+  return new Promise(res => {
+    const f = now => {
+      const k = Math.min(1, (now - t0) / ms), e = k < .5 ? 2*k*k : 1 - (-2*k + 2) ** 2 / 2;
+      setVB(from.map((a, i) => a + (to[i] - a) * e));
+      k < 1 ? requestAnimationFrame(f) : res();
+    };
+    requestAnimationFrame(f);
+  });
+}
+function placeFrame(fr){
+  racers.forEach((r, i) => {
+    const [x, y] = toView(...pt(fr[i][1], Math.min(fr[i][0], LAPS + 0.02)));
+    r.el.setAttribute("transform", `translate(${x.toFixed(1)},${y.toFixed(1)})`);
+  });
+}
+async function photoReplay(order, margin){
+  const race = $("race"), v = vertical();
+  const full = v ? [0, 0, H, W] : [0, 0, W, H];
+  // 결승선 주변만 크게
+  const [fx, fy] = toView(CX - 40, CY + (RIN + ROUT) / 2);
+  const zw = 330, zh = Math.max(ROUT - RIN + 70, 170);
+  const zoom = v ? [fx - zh/2, fy - zw/2, zh, zw] : [fx - zw/2, fy - zh/2, zw, zh];
+  // 결승선 140유닛 앞부터 다시 재생
+  const PR = PREF();
+  let start = tape.findIndex(fr => Math.max(...fr.map(a => a[0])) > LAPS - 140 / PR);
+  if (crossInfo && start > crossInfo.frame - tapeShift) start = -1;
+  if (start < 0) start = Math.max(0, (crossInfo ? crossInfo.frame - tapeShift : tape.length) - 120);
+  const end = crossInfo ? Math.min(tape.length, crossInfo.frame - tapeShift + 1) : tape.length;
+  const frames = tape.slice(start, Math.max(start + 1, end));
+
+  race.classList.add("replay");
+  $("replayTag").hidden = false; $("verdict").hidden = true;
+  $("msg").hidden = true; $("rank").style.visibility = "hidden";
+  Snd.shutter();
+  await zoomVB(full, zoom, 700);
+  placeFrame(frames[0]);
+  await sleep(400);
+  // 아주 천천히 다시 재생
+  for (let i = 0; i < frames.length; i += 1) {
+    placeFrame(frames[i]);
+    await sleep(frames.length > 90 ? 28 : 45);
+  }
+  // 결승선을 넘는 순간에서 멈춤
+  Snd.shutter();
+  const w = order[0], s2 = order[1];
+  $("verdict").innerHTML = `<div class="vt">📸 판독 결과</div>
+    <div class="v1">1착 ${w.em} ${esc(w.name)}</div>
+    <div class="v2">2착 ${s2.em} ${esc(s2.name)}</div>
+    <div class="vm">${marginWord(margin)}!!</div>`;
+  $("verdict").hidden = false;
+  race.classList.add("frozen");
+  await sleep(2600);
+  // 원래 화면으로
+  race.classList.remove("frozen");
+  $("verdict").hidden = true; $("replayTag").hidden = true;
+  await zoomVB(zoom, full, 600);
+  race.classList.remove("replay");
+  $("msg").hidden = false; $("rank").style.visibility = "";
+  placeAll();
+}
+
+function confetti(){
+  for (let i = 0; i < 60; i++) {
+    const d = document.createElement("div");
+    d.className = "confetti";
+    d.style.left = Math.random()*100 + "vw";
+    d.style.background = COLORS[i % COLORS.length];
+    d.style.animationDuration = (1.8 + Math.random()*1.6) + "s";
+    d.style.animationDelay = (Math.random()*0.5) + "s";
+    document.body.appendChild(d);
+    setTimeout(() => d.remove(), 4200);
+  }
+}
+
+/* ---------- 버튼 ---------- */
+function exitRace(){
+  if (racing) return;
+  $("modal").hidden = true; $("race").hidden = true;
+  document.body.style.overflow = "";
+  Snd.stop();
+  renderSetup();
+}
+$("startBtn").onclick = startRace;
+$("rAgain").onclick = startRace;
+$("rChange").onclick = exitRace;
+$("exitBtn").onclick = exitRace;
+$("rClose").onclick = () => { $("modal").hidden = true; };
+let lastOrder = [];
+$("rCopy").onclick = () => {
+  const text = `🏇 메뉴 경마 결과\n🏆 오늘의 메뉴: ${$("wEm").textContent} ${$("wNm").textContent}\n` +
+    lastOrder.map((r, i) => `${i+1}등 ${r.em} ${r.name}`).join("\n");
+  const ok = () => $("rCopy").textContent = "✅ 복사됨!";
+  const no = () => $("rCopy").textContent = "복사가 안 돼요 😢";
+  try { navigator.clipboard.writeText(text).then(ok, no); } catch(e){ no(); }
+};
+
+addEventListener("keydown", e => {
+  if (e.target.tagName === "INPUT") return;
+  if ((e.key === " " || e.key === "Enter") && $("race").hidden && !$("startBtn").disabled) { e.preventDefault(); startRace(); }
+});
+
+renderSetup();
+applyMode();
+</script>
+</body>
+</html>
