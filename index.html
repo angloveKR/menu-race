@@ -104,6 +104,26 @@ main{padding-bottom:190px!important}
 .promo b{font-size:16px}
 .promo small{font-size:12px;opacity:.85;line-height:1.35}
 .promo .pg{flex:none;background:#fff;color:#1e3a8a;font-weight:900;font-size:13px;padding:8px 12px;border-radius:999px}
+.mapDesc{text-align:left;background:#faf4ea;border-radius:14px;padding:10px 12px;margin:10px 0 12px;min-height:112px}
+.mapDesc .mdh{font-weight:900;font-size:15px;color:var(--ink);margin-bottom:4px}
+.mapDesc .mdh span{font-size:12px;font-weight:700;color:#fff;background:var(--accent);border-radius:8px;padding:1px 7px;margin-left:4px;vertical-align:1px}
+.mapDesc ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px}
+.mapDesc li{font-size:13px;color:var(--ink);line-height:1.4}
+.mapc .mtag{font-style:normal;font-size:10.5px;font-weight:800;color:var(--accent);background:#fff1e8;border-radius:6px;padding:1px 5px;margin:3px auto 0;white-space:nowrap}
+#mapPick .cbox{width:min(460px,100%)}
+.maps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mapc{position:relative;display:flex;flex-direction:column;align-items:stretch;gap:2px;padding:5px 5px 7px;border-radius:14px;
+  border:2.5px solid var(--line);background:#fff;text-align:center;overflow:hidden}
+.mapc .mprev{display:block;border-radius:10px;aspect-ratio:12/7;overflow:hidden;margin-bottom:4px}
+.mapc .mprev svg{display:block;width:100%;height:100%}
+.mapc .mprev.rnd{display:grid;place-items:center;font-size:30px;background:linear-gradient(135deg,#ffb347,#ff6b3d,#a855f7)}
+.mapc b{font-size:13px;color:var(--ink);white-space:nowrap}
+.mapc small{font-size:11px;color:var(--sub)}
+.mapc.on{border-color:var(--accent);box-shadow:0 3px 12px #ff6b3d40}
+.mapc.on::after{content:"✓";position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;
+  font-size:12px;font-weight:900;display:grid;place-items:center;box-shadow:0 0 0 2px #fff}
+#race.w-snow .wfx{background:radial-gradient(circle,#fff 0 2px,transparent 3px) 0 0/60px 60px,radial-gradient(circle,#ffffffcc 0 1.5px,transparent 2.5px) 30px 20px/90px 90px;animation:snowfall 3s linear infinite}
+@keyframes snowfall{to{background-position:20px 60px,50px 110px}}
 .guide{margin-top:18px;padding-top:14px;border-top:1.5px solid var(--line)}
 .guide h3{font-size:16px;margin:0 0 10px}
 .guide details{background:#faf4ea;border-radius:14px;margin-bottom:8px;overflow:hidden}
@@ -138,13 +158,13 @@ main{padding-bottom:190px!important}
 .dock .big{padding:13px;font-size:17px}
 
 /* ---------- 경마 화면 (꽉 찬 화면) ---------- */
-#race{position:fixed;inset:0;z-index:10;background:#2f6e3c;display:flex;flex-direction:column;color:#fff}
-.exit{position:absolute;top:10px;right:10px;z-index:3;background:#00000055;color:#fff;padding:8px 12px}
+#race{position:fixed;inset:0;z-index:10;background:var(--rbg,#2f6e3c);display:flex;flex-direction:column;color:#fff}
+.exit{position:absolute;top:10px;right:10px;z-index:9;background:#00000055;color:#fff;padding:8px 12px}
 .exit:disabled{opacity:.3}
 .hud{position:absolute;top:10px;left:10px;z-index:3;display:flex;gap:8px;align-items:center}
 .hud .btn{background:#00000055;color:#fff;padding:8px 10px;font-size:16px}
 .lapb{background:#ffe17a;color:#2b2118;font-weight:900;padding:6px 10px;border-radius:10px;font-size:14px;letter-spacing:.5px}
-#race.slow .stage::after{content:"SLOW MOTION";position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
+#race.slow .stage::after{content:"SLOW MOTION";position:absolute;bottom:72px;left:50%;transform:translateX(-50%);
   font-weight:900;letter-spacing:3px;color:#fff;background:#d00a;padding:4px 12px;border-radius:8px;z-index:3}
 #race.slow .stage{box-shadow:inset 0 0 120px #000a}
 .cast{position:absolute;left:50%;top:50%;transform:translate(-50%,-30%);z-index:2;pointer-events:none;
@@ -156,7 +176,7 @@ main{padding-bottom:190px!important}
 .rbody{flex:1;min-height:0;display:flex}
 .stage{position:relative;flex:1;min-width:0;min-height:0}
 #svg{position:absolute;inset:0;width:100%;height:100%}
-.rank{background:#1f4a28cc;padding:10px;display:grid;gap:4px;align-content:start}
+.rank{background:#00000059;padding:10px;display:grid;gap:4px;align-content:start}
 .ri{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:10px;background:#ffffff14;font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden}
 .ri:first-child{background:#ffd54a33;color:#ffe17a}
 .ri .no{width:18px;text-align:center;opacity:.8}
@@ -231,6 +251,15 @@ body.mobile .ri{font-size:12px;padding:4px 6px}
   radial-gradient(ellipse at 50% 110%,#fff3 0,#0000 40%),radial-gradient(ellipse at 50% 50%,#0000 50%,#000a 100%)}
 #race.w-night .rc circle{filter:drop-shadow(0 0 6px #fff)}
 #race.w-night .ibox{filter:drop-shadow(0 0 8px #ffe17a)}
+.door{transition:transform .35s cubic-bezier(.5,1.6,.6,1)}
+.door.da{transform-box:fill-box;transform-origin:top}
+.door.db{transform-box:fill-box;transform-origin:bottom}
+.door.da.open,.door.db.open{transform:scaleY(0)}
+.gnum{pointer-events:none}
+#race.camon .cast{top:auto;bottom:14px;transform:translateX(-50%);animation:none}
+.camBtn{position:absolute;right:10px;top:52px;z-index:3;background:#00000066;color:#fff;padding:7px 11px;font-size:13px}
+.trainTxt{filter:drop-shadow(0 4px 4px #0006);pointer-events:none}
+.xlight.on{fill:#ff3b30;animation:blink .3s infinite alternate}
 .windline{stroke:#fff;stroke-opacity:.28;stroke-width:2;stroke-dasharray:60 340;animation:wind 1.4s linear infinite}
 @keyframes wind{to{stroke-dashoffset:-400}}
 .zapfx.boom{background:radial-gradient(circle,#ffb347,#ff5a5f00 70%)!important}
@@ -241,7 +270,8 @@ body.mobile .ri{font-size:12px;padding:4px 6px}
 .halo{animation:halo 1s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}
 @keyframes halo{from{transform:scale(.9);opacity:.7}to{transform:scale(1.12);opacity:1}}
 .ri.me{box-shadow:inset 0 0 0 2px #ffe17a;background:#ffe17a22}
-.cheer{position:absolute;inset:0;z-index:5;display:grid;place-items:center;background:#0006;padding:16px}
+.cheer{position:absolute;inset:0;z-index:5;display:flex;overflow-y:auto;background:#0006;padding:16px}
+.cheer>.cbox{margin:auto}
 .cbox{background:#fff;color:var(--ink);border-radius:20px;padding:20px;width:min(420px,100%);text-align:center;animation:rise .3s ease-out}
 .ct{font-size:20px;font-weight:900}
 .cs{font-size:13px;color:var(--sub);margin:4px 0 14px}
@@ -258,6 +288,7 @@ body.mobile .ri{font-size:12px;padding:4px 6px}
 .tr.up{color:#7CFC8A}.tr.down{color:#ff8a8a}
 .ri .gap{margin-left:auto;font-size:11px;opacity:.75;font-weight:600;padding-left:6px}
 body.mobile .ri .gap{font-size:10px}
+.lapb:empty{display:none}
 .lapb.final{background:#ff5a5f;color:#fff;animation:blink .6s ease-in-out infinite alternate}
 @keyframes blink{to{transform:scale(1.08)}}
 .toggle{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:14px;background:#faf4ea}
@@ -350,11 +381,16 @@ body.mobile .ri .gap{font-size:10px}
         </div>
       </details>
       <details>
+        <summary>🗺️ 맵</summary>
+        <div class="gl" id="mapGuide"></div>
+      </details>
+      <details>
         <summary>🌦️ 날씨</summary>
         <div class="gl">
           <div class="gi"><b>☀️</b><div><strong>맑음 (30%)</strong><p>특별한 효과 없이 실력 대결</p></div></div>
           <div class="gi"><b>🌧️</b><div><strong>비 (25%)</strong><p>트랙에 물웅덩이가 생겨요. 밟으면 느려지고, 코너에선 가끔 💦 미끄덩!</p></div></div>
           <div class="gi"><b>🌙</b><div><strong>야간 경기 (25%)</strong><p>어두워서 ❓ 상자가 가까이 와야 보여요. 상자를 덜 노려요</p></div></div>
+          <div class="gi"><b>🌨️</b><div><strong>눈 (눈꽃 코스에서만)</strong><p>눈이 내려서 조금 느려지고, 코너에서 가끔 미끄러져요</p></div></div>
           <div class="gi"><b>💨</b><div><strong>강풍 (20%)</strong><p>결승선 쪽 직선은 순풍이라 빨라지고, 반대쪽 직선은 맞바람이라 느려져요</p></div></div>
         </div>
       </details>
@@ -396,6 +432,7 @@ body.mobile .ri .gap{font-size:10px}
     <div class="stage">
       <button class="btn exit" id="exitBtn">✕ 나가기</button>
       <div class="hud"><button class="btn" id="muteBtn">🔊</button><span class="lapb" id="lap">LAP 1/2</span><span class="wb" id="wBadge"></span></div>
+      <button class="btn camBtn" id="camBtn" hidden>🗺️ 전체 보기</button>
       <div class="wfx" id="wfx"></div>
       <div class="cast" id="msg"></div>
       <svg id="svg" preserveAspectRatio="xMidYMid meet"></svg>
@@ -403,6 +440,15 @@ body.mobile .ri .gap{font-size:10px}
       <div class="replayTag" id="replayTag" hidden><span class="rec"></span>REPLAY · 📸 PHOTO FINISH</div>
       <div class="verdict" id="verdict" hidden></div>
       <div class="podium" id="podium" hidden><div class="ptitle">🏆 시상식 🏆</div><div class="pods" id="pods"></div></div>
+      <div class="cheer" id="mapPick" hidden>
+        <div class="cbox">
+          <div class="ct">어디서 달릴까요? 🗺️</div>
+          <div class="cs">맵마다 트랙 모양과 규칙이 달라요</div>
+          <div class="maps" id="maps"></div>
+          <div class="mapDesc" id="mapDesc"></div>
+          <button class="big" id="mapGo">이 맵으로 출발!</button>
+        </div>
+      </div>
       <div class="cheer" id="cheerPick" hidden>
         <div class="cbox">
           <div class="ct">누구를 응원할래요? ⭐</div>
@@ -557,8 +603,77 @@ renderItemSw();
 const env = x => x <= 0 || x >= 1 ? 0 : x < 0.35 ? x / 0.35 : x > 0.65 ? (1 - x) / 0.35 : 1;
 
 /* ---------- 경마 트랙 (직선 2개 + 반원 2개) ---------- */
-const W = 1100, H = 620, CX = 550, CY = 310, S = 230;   // S: 직선 길이의 절반
-const RIN = 110, ROUT_MAX = 290;
+const W = 1100, H = 620, CX = 550, CY = 310;
+let S = 230, RIN = 110, ROUT_MAX = 290;   // S: 직선 길이의 절반 (맵마다 달라요)
+
+/* ---------- 🗺️ 맵 ---------- */
+const MAPS = {
+  classic: {tag:"기본", feats:["🏇 기본 타원 트랙", "⚖️ 특별한 규칙 없는 정석 대결"], em:"🏇", name:"클래식 경마장", desc:"기본 트랙. 실력과 운의 정석 대결", laps:3, S:230, RIN:110, RMAX:290,
+    theme:{bg:"#2f6e3c", rail:"#ffffff", edge:"#b8794a", dirt:"#c98b55", lane:"#ffffff66", infield:"#3f8f4f", stripe:"#ffffff10", title:"#ffffffd0"},
+    title:"MENU DERBY", deco:"", weathers:["sun","rain","night","wind"]},
+  stadium: {tag:"안쪽 유리", feats:["⭕ 거의 동그란 트랙이라 계속 코너", "🎯 안쪽 레일에 붙은 메뉴가 엄청 유리", "🎲 게이트 추첨 운이 중요해요"], em:"🏟️", name:"원형 경기장", desc:"거의 동그란 트랙! 계속 코너라 안쪽 자리가 엄청 유리해요", laps:3, S:50, RIN:120, RMAX:290,
+    theme:{bg:"#1e293b", rail:"#e2e8f0", edge:"#9a3412", dirt:"#c2410c", lane:"#ffffffaa", infield:"#16a34a", stripe:"#ffffff14", title:"#ffffffd0"},
+    title:"STADIUM", deco:"📣 🎉 📣", weathers:["sun","rain","night","wind"]},
+  speed: {tag:"슬립스트림", feats:["🏁 직선이 긴 2바퀴 단거리", "🌬️ 앞 메뉴 뒤에 붙어 달리면 15% 빨라짐 (다른 맵은 8%)", "🔁 막판 추월이 자주 나와요"], em:"🏁", name:"스피드웨이", desc:"긴 직선을 2바퀴! 앞 메뉴 뒤에 붙어 달리면(슬립스트림) 더 빨라져요", laps:2, S:320, RIN:70, RMAX:215,
+    theme:{bg:"#111827", rail:"#facc15", edge:"#374151", dirt:"#4b5563", lane:"#ffffffcc", infield:"#1f2937", stripe:"#ffffff08", title:"#facc15d0"},
+    title:"SPEEDWAY", deco:"", weathers:["sun","rain","night"], draft:1.15},
+  desert: {tag:"모래 언덕", feats:["🏜️ 모래 언덕 4곳: 밟으면 25% 느려져요", "☀️ 비는 안 와요"], em:"🏜️", name:"사막 코스", desc:"모래 언덕을 밟으면 푹푹 빠져서 느려져요", laps:3, S:240, RIN:110, RMAX:290,
+    theme:{bg:"#d9b77c", rail:"#fff7e6", edge:"#b07d3f", dirt:"#e3b673", lane:"#ffffff99", infield:"#e9c98f", stripe:"#00000008", title:"#8a5a1ccc"},
+    title:"DESERT RUN", deco:"🌵 🐪 🌵", weathers:["sun","wind","night"], zone:{kind:"sand", n:4, name:"모래 언덕"}},
+  snow: {tag:"빙판", feats:["🧊 빙판 4곳: 위에선 12% 빨라지지만 가끔 꽈당!", "🌨️ 이 맵에서만 눈이 와요 (코너에서 미끄덩)"], em:"❄️", name:"눈꽃 코스", desc:"빙판 위에선 쭉 미끄러지듯 빨라지지만, 가끔 넘어져요", laps:3, S:230, RIN:110, RMAX:290,
+    theme:{bg:"#bfdbfe", rail:"#ffffff", edge:"#93c5fd", dirt:"#e0f2fe", lane:"#60a5fa99", infield:"#f8fafc", stripe:"#93c5fd22", title:"#3b82f6cc"},
+    title:"SNOW CUP", deco:"⛄ 🌲 ⛄", weathers:["sun","snow","night"], zone:{kind:"ice", n:4, name:"빙판"}},
+  space: {tag:"아이템 1.3배", feats:["🚀 무중력: 모든 아이템 효과가 1.3배", "🎁 아이템 상자 3개 더", "🌌 날씨 없음"], em:"🚀", name:"우주 코스", desc:"무중력이라 아이템 효과가 1.3배! 상자도 더 많아요", laps:3, S:230, RIN:110, RMAX:290,
+    theme:{bg:"radial-gradient(circle at 20% 30%,#ffffff 0 1px,transparent 2px) 0 0/90px 90px,radial-gradient(circle at 70% 60%,#ffffffaa 0 1px,transparent 2px) 0 0/130px 130px,radial-gradient(ellipse at 50% 40%,#2e1065,#0b0a1f 70%)",
+      rail:"#a78bfa", edge:"#4c1d95", dirt:"#312e81", lane:"#c4b5fd88", infield:"#0f0a2e", stripe:"#ffffff06", title:"#c4b5fdd0"},
+    title:"GALAXY GP", deco:"🪐 ✨ 🌙", weathers:["sun"], power:1.3, boxBonus:3},
+  rail: {tag:"기차·갈림길", feats:["🌀 S자 커브와 헤어핀이 있는 꼬불꼬불 코스", "🛤️ 갈림길: 지름길은 15% 짧지만 한 줄 자갈길, 상자 없음", "🚂 기차가 계속 달리며 건널목 3곳을 막아요"], em:"🚂", name:"레일 익스프레스", desc:"S자 커브와 헤어핀이 있는 꼬불꼬불 코스! 기차가 계속 달리면서 큰길과 지름길 건널목을 막아요", laps:3,
+    type:"path", S:0, RIN:100, RMAX:220, SW:46,
+    path:[[550,540],[800,540],[960,505],[1022,385],[995,255],[880,178],[760,248],[650,345],[530,345],[430,262],[330,152],[205,140],[112,250],[132,405],[262,512],[400,540]],
+    fork:{from:[880,178], to:[330,152], via:[[775,92],[600,72],[440,92]]},
+    railX:690,   // 세로로 지나가는 철길 (x 위치)
+    theme:{bg:"#5b7a3a", rail:"#eeeeee", edge:"#8a6a45", dirt:"#a9825a", lane:"#ffffff77", infield:"#5b7a3a", stripe:"#0000", title:"#ffffffd0", short:"#7c7c7c"},
+    title:"RAIL EXPRESS", deco:"🚉", titleAt:[560,448], decoAt:[262,330], weathers:["sun","rain","night"]},
+};
+let PATH = null;   // 자유 곡선 트랙일 때만 쓰는 트랙 정보
+let mapPref = load("mr_map", "classic"), curMap = MAPS.classic, zones = [];
+if (!MAPS[mapPref] && mapPref !== "random") mapPref = "classic";
+function useMap(key){
+  curMap = MAPS[key]; curMap.key = key;
+  S = curMap.S; RIN = curMap.RIN; ROUT_MAX = curMap.RMAX; LAPS = curMap.laps; MARKS = genMarks(LAPS);
+  PATH = curMap.type === "path" ? (curMap._P || (curMap._P = buildPath(curMap))) : null;
+}
+// 맵 카드에 들어가는 작은 트랙 그림 (실제 트랙 비율 그대로)
+function miniTrack(m){
+  if (m.type === "path") {
+    const P = m._P || (m._P = buildPath(m)), k = 0.105, ox = 60 - 565 * k, oy = 35 - 340 * k;
+    const ln = C => { let q = ""; for (let i = 0; i < C.M; i += 30) q += (ox + C.xs[i] * k).toFixed(1) + "," + (oy + C.ys[i] * k).toFixed(1) + " "; return q; };
+    const T = m.theme;
+    return `<svg viewBox="0 0 120 70" aria-hidden="true">
+      <polyline points="${ln(P.sc)}" fill="none" stroke="${T.rail}" stroke-width="7" stroke-linejoin="round"/><polyline points="${ln(P.sc)}" fill="none" stroke="${T.short}" stroke-width="4" stroke-linejoin="round"/>
+      <polygon points="${ln(P.main)}" fill="none" stroke="${T.rail}" stroke-width="15" stroke-linejoin="round"/><polygon points="${ln(P.main)}" fill="none" stroke="${T.dirt}" stroke-width="11" stroke-linejoin="round"/>
+      <line x1="${ox + m.railX * k}" y1="0" x2="${ox + m.railX * k}" y2="70" stroke="#5b4632" stroke-width="3"/><line x1="${ox + m.railX * k}" y1="0" x2="${ox + m.railX * k}" y2="70" stroke="#cfd4da" stroke-width="1" stroke-dasharray="2 2"/>
+      <text x="60" y="46" text-anchor="middle" dominant-baseline="central" font-size="11">${m.em}</text></svg>`;
+  }
+  const T = m.theme, k = Math.min(52 / (m.S + m.RMAX + 8), 29 / (m.RMAX + 8));
+  const ov = (R, fill) => `<rect x="${60 - (m.S + R) * k}" y="${35 - R * k}" width="${2 * (m.S + R) * k}" height="${2 * R * k}" rx="${R * k}" fill="${fill}"/>`;
+  return `<svg viewBox="0 0 120 70" aria-hidden="true">${ov(m.RMAX + 8, T.rail)}${ov(m.RMAX + 4, T.edge)}${ov(m.RMAX, T.dirt)}${ov(m.RIN, T.rail)}${ov(m.RIN - 4, T.infield)}
+    <rect x="${60 - 1.2}" y="${35 + m.RIN * k}" width="2.4" height="${(m.RMAX - m.RIN) * k}" fill="#fff"/>
+    <text x="60" y="36" text-anchor="middle" dominant-baseline="central" font-size="${Math.min(18, m.RIN * k * 1.4)}">${m.em}</text></svg>`;
+}
+function renderMaps(){
+  const cards = Object.entries(MAPS).map(([k, m]) => `<button class="mapc ${mapPref === k ? "on" : ""}" data-m="${k}">
+      <span class="mprev" style="background:${m.theme.bg}">${miniTrack(m)}</span><b>${m.name}</b><small>${m.laps}바퀴</small><i class="mtag">${m.tag}</i></button>`).join("");
+  $("maps").innerHTML = cards + `<button class="mapc ${mapPref === "random" ? "on" : ""}" data-m="random">
+      <span class="mprev rnd">🎲</span><b>랜덤 맵</b><small>매번 다르게</small><i class="mtag">운빨</i></button>`;
+  const m = MAPS[mapPref];
+  // 고른 맵의 특징 설명
+  $("mapDesc").innerHTML = m
+    ? `<div class="mdh">${m.em} ${m.name} <span>${m.laps}바퀴</span></div>
+       <ul>${m.feats.map(f => `<li>${f}</li>`).join("")}
+       <li>🌦️ 날씨: ${m.weathers.length > 1 ? m.weathers.map(w => WEATHER[w].em + " " + WEATHER[w].name).join(" · ") : "없음"}</li></ul>`
+    : `<div class="mdh">🎲 랜덤 맵</div><ul><li>출발할 때마다 ${Object.keys(MAPS).length}개 맵 중 하나를 랜덤으로 골라요</li><li>어떤 맵이 나올지는 출발해야 알 수 있어요!</li></ul>`;
+}
 let LW = 22, ROUT = 290;
 const NS = "http://www.w3.org/2000/svg";
 const vertical = () => actualMode() === "mobile";
@@ -567,10 +682,87 @@ const toView = (x, y) => vertical() ? [H - y, x] : [x, y];
 
 // 진짜 경마처럼: 진행도 p(바퀴 수)는 '제일 안쪽 레일' 기준 거리로 재요.
 // 그래서 코너에서 바깥으로 도는 말은 같은 속도로 달려도 손해를 봐요.
+/* ---------- 🛤️ 자유 곡선 트랙 (레일 익스프레스) ---------- */
+// 점 여러 개를 부드러운 곡선(캣멀-롬 스플라인)으로 이어서 트랙을 만들어요
+function crSample(P, closed, per){
+  const out = [], n = P.length, get = i => closed ? P[(i + n) % n] : P[Math.max(0, Math.min(n - 1, i))];
+  const last = closed ? n : n - 1;
+  for (let i = 0; i < last; i++) {
+    const p0 = get(i - 1), p1 = get(i), p2 = get(i + 1), p3 = get(i + 2);
+    for (let k = 0; k < per; k++) {
+      const t = k / per, t2 = t * t, t3 = t2 * t;
+      out.push([0, 1].map(c => 0.5 * ((2 * p1[c]) + (-p0[c] + p2[c]) * t + (2 * p0[c] - 5 * p1[c] + 4 * p2[c] - p3[c]) * t2 + (-p0[c] + 3 * p1[c] - 3 * p2[c] + p3[c]) * t3)));
+    }
+  }
+  if (!closed) out.push(P[n - 1].slice());
+  return out;
+}
+// 같은 간격으로 다시 찍기 + 방향(접선)·굽은 정도(곡률) 계산
+function resample(pts, M, closed){
+  const seg = [], cum = [0];
+  const m = closed ? pts.length : pts.length - 1;
+  for (let i = 0; i < m; i++) { const a = pts[i], b = pts[(i + 1) % pts.length]; const d = Math.hypot(b[0] - a[0], b[1] - a[1]); seg.push(d); cum.push(cum[i] + d); }
+  const L = cum[cum.length - 1], xs = new Float64Array(M), ys = new Float64Array(M);
+  let j = 0;
+  for (let i = 0; i < M; i++) {
+    const s = L * i / (closed ? M : M - 1);
+    while (j < seg.length - 1 && cum[j + 1] < s) j++;
+    const a = pts[j], b = pts[(j + 1) % pts.length], t = seg[j] ? (s - cum[j]) / seg[j] : 0;
+    xs[i] = a[0] + (b[0] - a[0]) * t; ys[i] = a[1] + (b[1] - a[1]) * t;
+  }
+  const tx = new Float64Array(M), ty = new Float64Array(M), k = new Float64Array(M), ds = L / (closed ? M : M - 1);
+  const idx = i => closed ? (i + M) % M : Math.max(0, Math.min(M - 1, i));
+  for (let i = 0; i < M; i++) {
+    const a = idx(i - 2), b = idx(i + 2); let dx = xs[b] - xs[a], dy = ys[b] - ys[a]; const d = Math.hypot(dx, dy) || 1;
+    tx[i] = dx / d; ty[i] = dy / d;
+  }
+  const raw = new Float64Array(M);
+  for (let i = 0; i < M; i++) { const a = idx(i - 3), b = idx(i + 3); raw[i] = -(tx[a] * ty[b] - ty[a] * tx[b]) / (6 * ds); }   // 왼쪽으로 꺾이면 +
+  const W2 = 12;
+  for (let i = 0; i < M; i++) { let sum = 0, c = 0; for (let d = -W2; d <= W2; d++) { const q = idx(i + d); sum += raw[q]; c++; } k[i] = sum / c; }
+  return {L, M, xs, ys, tx, ty, k, closed};
+}
+function buildPath(m){
+  const main = resample(crSample(m.path, true, 40), 2400, true);
+  const near = ([x, y]) => { let best = 0, bd = 1e18; for (let i = 0; i < main.M; i++) { const d = (main.xs[i] - x) ** 2 + (main.ys[i] - y) ** 2; if (d < bd) { bd = d; best = i; } } return best; };
+  const i1 = near(m.fork.from), i2 = near(m.fork.to);
+  const at = i => [main.xs[(i + main.M) % main.M], main.ys[(i + main.M) % main.M]];
+  const ctrl = [at(i1 - 50), at(i1), ...m.fork.via, at(i2), at(i2 + 50)];
+  const dense = crSample(ctrl, false, 40);
+  const per = 40, cut = dense.slice(per, dense.length - per);   // 양 끝 도움점 구간은 버려요
+  const sc = resample(cut, 900, false);
+  const P = {main, sc, s1: i1 / main.M, s2: i2 / main.M, ratio: ((i2 - i1) / main.M) * main.L / sc.L, SW: m.SW, cross: []};
+  if (m.railX) {   // 철길이 길을 가로지르는 건널목 찾기
+    const X = m.railX;
+    for (let i = 0, last = -999; i < main.M; i++) { const j = (i + 1) % main.M; if ((main.xs[i] - X) * (main.xs[j] - X) <= 0 && i - last > 50) { last = i; P.cross.push({short: false, f: i / main.M, y: main.ys[i]}); } }
+    for (let i = 0; i < sc.M - 1; i++) if ((sc.xs[i] - X) * (sc.xs[i + 1] - X) <= 0) { const u = i / (sc.M - 1); P.cross.push({short: true, u, f: P.s1 + u * (P.s2 - P.s1), y: sc.ys[i]}); break; }
+  }
+  return P;
+}
+function curveAt(P, f){ const i = Math.round(f * P.M) % P.M; return P.k[(i + P.M) % P.M]; }
+function lerpAt(C, fi){
+  const n = C.M, i0 = Math.floor(fi), t = fi - i0;
+  const a = C.closed ? ((i0 % n) + n) % n : Math.max(0, Math.min(n - 1, i0)), b = C.closed ? (a + 1) % n : Math.min(n - 1, a + 1);
+  return [C.xs[a] + (C.xs[b] - C.xs[a]) * t, C.ys[a] + (C.ys[b] - C.ys[a]) * t, C.tx[a], C.ty[a]];
+}
+// 트랙 위 점: off(+면 왼쪽=안쪽), br이면 지름길 위
+function pathPos(PATH, off, p, br){
+  const f = ((p % 1) + 1) % 1;
+  if (br && f >= PATH.s1 && f <= PATH.s2) {
+    const u = (f - PATH.s1) / (PATH.s2 - PATH.s1), lim = PATH.SW / 2 - 6;
+    const [x, y, tx, ty] = lerpAt(PATH.sc, u * (PATH.sc.M - 1)); const o = Math.max(-lim, Math.min(lim, off));
+    return [x + ty * o, y - tx * o];
+  }
+  const [x, y, tx, ty] = lerpAt(PATH.main, f * PATH.main.M);
+  return [x + ty * off, y - tx * off];
+}
+
+const MID = () => (RIN + ROUT) / 2;
 const R0 = () => laneR(0);                       // 안쪽 레일 라인
-const PREF = () => 4*S + 2*Math.PI*R0();         // 안쪽 레일 한 바퀴 길이
+const PREF = () => PATH ? PATH.main.L : 4*S + 2*Math.PI*R0();   // 한 바퀴 길이 (기준선)
 // 반지름 r(안쪽~바깥 위치)에서 진행도 p의 화면 좌표. 결승선 = 아래쪽 직선 가운데, 시계 반대 방향
-function pt(r, p){
+function pt(r, p, br){
+  if (PATH) return pathPos(PATH, MID() - r, p, br);
   const r0 = R0(), A = Math.PI * r0;
   let d = (((p % 1) + 1) % 1) * PREF();
   if (d < S) return [CX + d, CY + r];
@@ -584,6 +776,7 @@ function pt(r, p){
 }
 // 지금 코너를 돌고 있는지
 function onCurve(p){
+  if (PATH) return Math.abs(curveAt(PATH.main, p)) > 1 / 250;
   const A = Math.PI * R0(); let d = (((p % 1) + 1) % 1) * PREF();
   return (d >= S && d < S + A) || (d >= 3*S + A && d < 3*S + 2*A);
 }
@@ -592,19 +785,50 @@ const laneR = i => RIN + LW * (i + 0.5);
 const oval = (R, attrs) => `<rect x="${CX-S-R}" y="${CY-R}" width="${2*S+2*R}" height="${2*R}" rx="${R}" ${attrs}/>`;
 
 function drawTrack(){
-  const n = racers.length;
+  const n = racers.length, T = curMap.theme;
+  $("race").style.setProperty("--rbg", T.bg);
   LW = Math.min(34, (ROUT_MAX - RIN) / n);
   ROUT = RIN + LW * n;
   const v = vertical(), svg = $("svg");
   svg.setAttribute("viewBox", v ? `0 0 ${H} ${W}` : `0 0 ${W} ${H}`);
   // 레인 줄은 꾸미기용이에요. 메뉴들은 줄 상관없이 자유롭게 달려요
   let lanes = "";
-  for (let i = 1; i < n; i++) lanes += oval(RIN + LW*i, `fill="none" stroke="#ffffff66" stroke-width="1.5" stroke-dasharray="10 8"`);
+  for (let i = 1; i < n; i++) lanes += oval(RIN + LW*i, `fill="none" stroke="${T.lane}" stroke-width="1.5" stroke-dasharray="10 8"`);
   // 마구 깎은 잔디 줄무늬
   let stripes = "";
-  for (let x = CX - S - RIN; x < CX + S + RIN; x += 60) stripes += `<rect x="${x}" y="${CY-RIN}" width="30" height="${2*RIN}" fill="#ffffff10"/>`;
+  for (let x = CX - S - RIN; x < CX + S + RIN; x += 60) stripes += `<rect x="${x}" y="${CY-RIN}" width="30" height="${2*RIN}" fill="${T.stripe}"/>`;
   const fy1 = CY + RIN, fy2 = CY + ROUT;
   const [tx, ty] = toView(CX, CY);
+  if (PATH) {   // 🚂 자유 곡선 트랙
+    const [ttx, tty] = toView(...curMap.titleAt), [ddx, ddy] = toView(...curMap.decoAt);
+    svg.innerHTML = `
+    <defs>
+      <pattern id="chk" width="12" height="12" patternUnits="userSpaceOnUse">
+        <rect width="12" height="12" fill="#fff"/><rect width="6" height="6" fill="#222"/><rect x="6" y="6" width="6" height="6" fill="#222"/>
+      </pattern>
+      <linearGradient id="rainbow" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#ff5a5f"/><stop offset=".35" stop-color="#ffcc00"/><stop offset=".7" stop-color="#22c55e"/><stop offset="1" stop-color="#3b82f6"/>
+      </linearGradient>
+    </defs>
+    <g transform="${v ? `matrix(0,1,-1,0,${H},0)` : ""}">
+      ${pathTrackSVG(T)}
+      <g id="zlayer">${zoneLayer()}</g>
+      <g id="wlayer">${weatherLayer()}</g>
+      <g id="gate">${gateLayer()}</g>
+    </g>
+    <g id="gateNums">${gateNums()}</g>
+    ${(() => { const [sx, sy] = toView(...pathPos(PATH, LW * racers.length / 2 + 26, PATH.s1 - 0.02, false));   // 갈림길 표지판 (글자는 항상 바로 서게)
+      return `<g transform="translate(${sx.toFixed(1)},${sy.toFixed(1)})"><rect x="-34" y="-12" width="68" height="22" rx="6" fill="#facc15" stroke="#222" stroke-width="2"/>
+      <text text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="900" fill="#222" y="-1">🚂 지름길</text></g>`; })()}
+    <text x="${ttx}" y="${tty}" text-anchor="middle" dominant-baseline="central" font-size="${v ? 18 : 24}" font-weight="900" fill="${T.title}">${curMap.em} ${curMap.title}</text>
+    <text x="${ddx}" y="${ddy}" text-anchor="middle" dominant-baseline="central" font-size="40">${curMap.deco}</text>
+    <g id="items"></g>
+    <g id="horses"></g>
+    <g transform="${v ? `matrix(0,1,-1,0,${H},0)` : ""}"><g id="trainG" transform="translate(${curMap.railX},${trainY.toFixed(1)})">
+      <text class="trainTxt" transform="rotate(-90)" text-anchor="middle" dominant-baseline="central" font-size="36">🚂🚃🚃🚃</text></g></g>
+    <g id="shots"></g>
+    <g id="fx"></g>`;
+  } else {
   svg.innerHTML = `
     <defs>
       <pattern id="chk" width="12" height="12" patternUnits="userSpaceOnUse">
@@ -616,25 +840,31 @@ function drawTrack(){
       <clipPath id="inClip">${oval(RIN-4, "")}</clipPath>
     </defs>
     <g transform="${v ? `matrix(0,1,-1,0,${H},0)` : ""}">
-      ${oval(ROUT+10, `fill="#ffffff"`)}
-      ${oval(ROUT+6, `fill="#b8794a"`)}
-      ${oval(ROUT, `fill="#c98b55"`)}
+      ${oval(ROUT+10, `fill="${T.rail}"`)}
+      ${oval(ROUT+6, `fill="${T.edge}"`)}
+      ${oval(ROUT, `fill="${T.dirt}"`)}
       ${lanes}
-      ${oval(RIN, `fill="#ffffff"`)}
-      ${oval(RIN-4, `fill="#3f8f4f"`)}
+      ${oval(RIN, `fill="${T.rail}"`)}
+      ${oval(RIN-4, `fill="${T.infield}"`)}
       <g clip-path="url(#inClip)">${stripes}</g>
+      <g id="zlayer">${zoneLayer()}</g>
       <g id="wlayer">${weatherLayer()}</g>
       <rect x="${CX-6}" y="${fy1}" width="12" height="${fy2-fy1}" fill="url(#chk)"/>
       <rect x="${CX-2}" y="${fy2+6}" width="4" height="22" fill="#fff"/>
+      <g id="gate">${gateLayer()}</g>
     </g>
+    <g id="gateNums">${gateNums()}</g>
     ${v
-      ? `<text x="${tx}" y="${ty - 150}" text-anchor="middle" font-size="40">🏇</text>
-         <text x="${tx}" y="${ty - 108}" text-anchor="middle" font-size="24" font-weight="900" fill="#ffffffb0">MENU DERBY</text>`
-      : `<text x="${tx}" y="${ty - 62}" text-anchor="middle" font-size="30" font-weight="900" fill="#ffffffb0">🏇 MENU DERBY</text>`}
+      ? `<text x="${tx}" y="${ty - Math.min(150, RIN + 30)}" text-anchor="middle" font-size="40">${curMap.em}</text>
+         <text x="${tx}" y="${ty - Math.min(108, RIN - 8)}" text-anchor="middle" font-size="${RIN < 90 ? 18 : 24}" font-weight="900" fill="${T.title}">${curMap.title}</text>
+         <text x="${tx}" y="${ty + Math.min(170, RIN + 50)}" text-anchor="middle" font-size="30">${curMap.deco}</text>`
+      : `<text x="${tx}" y="${ty - RIN * 0.55}" text-anchor="middle" font-size="${RIN < 90 ? 22 : 30}" font-weight="900" fill="${T.title}">${curMap.em} ${curMap.title}</text>
+         <text x="${tx}" y="${ty + RIN * 0.7}" text-anchor="middle" font-size="30">${curMap.deco}</text>`}
     <g id="items"></g>
     <g id="horses"></g>
     <g id="shots"></g>
     <g id="fx"></g>`;
+  }
   const fs = Math.max(20, Math.min(30, LW * 1.1)); RFS = fs;
   const ids = racers.map((_, i) => i).sort((a, b) => (racers[a].fav ? 1 : 0) - (racers[b].fav ? 1 : 0));  // 응원하는 말은 맨 위에
   $("horses").innerHTML = ids.map(i => { const r = racers[i]; return `
@@ -652,7 +882,7 @@ function drawTrack(){
 function placeAll(){
   // 앞서는 말이 위에 그려지게
   racers.forEach((r, i) => {
-    const [x, y] = toView(...pt(r.rad, r.p));
+    const [x, y] = toView(...pt(r.rad, r.p, r.br));
     r.el.setAttribute("transform", `translate(${x.toFixed(1)},${y.toFixed(1)})`);
   });
 }
@@ -673,7 +903,7 @@ function placeBox(b, pos){
   b.rad = laneR(b.slot);
 }
 function popFx(r, em){
-  const [x, y] = toView(...pt(r.rad, r.p));
+  const [x, y] = toView(...pt(r.rad, r.p, r.br));
   const t = document.createElementNS(NS, "text");
   t.setAttribute("x", x); t.setAttribute("y", y - 20); t.setAttribute("text-anchor", "middle");
   t.setAttribute("font-size", r.fav ? "40" : "26"); t.setAttribute("class", "pop"); t.textContent = em;
@@ -787,11 +1017,11 @@ function crossLine(r, now){
       say("결승선 통과!!! 누가 먼저인가요?!", true);
     } else {
       r.el.classList.add("win");
-      say(`🏁 1착 ${r.name}!!! 결승선 통과!`, true);
+      say(`🏁 1등 ${r.name}!!! 결승선 통과!`, true);
     }
   } else if (photoPending) {
     if (r.place === 2) say("거의 동시에 들어왔습니다!! 📸 판독이 필요합니다!", true);
-  } else if (r.place <= 3) say(`${medal} ${r.place}착은 ${r.name}!`, true);
+  } else if (r.place <= 3) say(`${medal} ${r.place}등은 ${r.name}!`, true);
   Snd.ding(photoPending ? 2 : r.place);
   if (!photoPending) showMedal(r);
 }
@@ -803,7 +1033,7 @@ function showMedal(r){
   t.setAttribute("x", -RFS * 0.62); t.setAttribute("y", -RFS * 0.5); t.setAttribute("text-anchor", "middle");
   t.setAttribute("dominant-baseline", "central"); t.setAttribute("font-size", RFS * 0.75); t.setAttribute("class", "medal");
   t.textContent = medal; r.el.appendChild(t);
-  tagFx(r, `${medal} ${r.place}착!`);
+  tagFx(r, `${medal} ${r.place}등!`);
   renderRank();
 }
 // 순위 옆 ▲▼ 표시 + 선두와의 거리 ('마신' = 말 한 마리 길이, 한 바퀴 ≈ 40마신으로 계산)
@@ -814,7 +1044,7 @@ function renderRank(){
     if (r.rk !== undefined && r.rk !== k) { r.trend = k < r.rk ? "up" : "down"; r.trendT = now + 1500; }
     r.rk = k;
     const tr = now < (r.trendT || 0) ? `<span class="tr ${r.trend}">${r.trend === "up" ? "▲" : "▼"}</span>` : "";
-    const g = (lead - r.p) * 40, gap = r.place ? `${MEDAL[r.place-1] || ""}${r.place}착` : k === 0 ? "선두" : g < 0.05 ? "나란히" : `-${g.toFixed(1)}`;
+    const g = (lead - r.p) * 40, gap = r.place ? `${MEDAL[r.place-1] || ""}${r.place}등` : k === 0 ? "선두" : g < 0.05 ? "나란히" : `-${g.toFixed(1)}`;
     return `<div class="ri ${r.fav ? "me" : ""}"><span class="no">${k+1}</span><span class="dot" style="background:${r.color}"></span>${r.em}<span class="nm">${r.fav ? "⭐ " : ""}${esc(r.name)}</span>${tr}<span class="gap">${gap}</span></div>`;
   }).join("");
 }
@@ -841,18 +1071,16 @@ function say(text, force){
 
 const pick = a => a[Math.random()*a.length|0];
 const LEAD = [n=>`${n}, 선두로 치고 나갑니다!`, n=>`${n}! 앞으로 튀어나옵니다!`, n=>`이번엔 ${n}이(가) 1등!`, n=>`${n}, 역전입니다!!`];
-const MARKS = [
-  [0.15, () => "첫 번째 코너를 돕니다!"],
-  [0.5,  () => "건너편 직선 주로! 아직 초반입니다!"],
-  [1.0,  n => `2바퀴째로 들어갑니다! 선두는 ${n}!`, true],
-  [1.5,  () => "중반 레이스! 아직 승부는 모릅니다!"],
-  [1.8,  n => `${n}, 이대로 굳히기 들어가나요?`],
-  [2.0,  n => `🔔 마지막 바퀴!! 현재 선두는 ${n}!`, true],
-  [2.3,  () => "마지막 바퀴 첫 코너! 아직 아무도 모릅니다!"],
-  [2.55, n => `건너편 직선! ${n} 앞서 갑니다!`],
-  [2.75, () => "마지막 코너!! 자리 싸움이 치열합니다!", true],
-  [2.88, n => `직선 주로! 결승선이 보입니다! 선두는 ${n}!!`, true],
-];
+// 바퀴 수에 맞춰 중계 멘트 위치를 만들어요
+function genMarks(L){
+  const m = [[0.15, () => "첫 번째 코너를 돕니다!"], [0.5, () => "건너편 직선 주로! 아직 초반입니다!"]];
+  for (let k = 1; k < L - 1; k++) m.push([k, n => `${k + 1}바퀴째로 들어갑니다! 선두는 ${n}!`, true], [k + 0.5, () => "중반 레이스! 아직 승부는 모릅니다!"]);
+  m.push([L - 1, n => `🔔 마지막 바퀴!! 현재 선두는 ${n}!`, true], [L - 0.7, () => "마지막 바퀴 첫 코너! 아직 아무도 모릅니다!"],
+    [L - 0.45, n => `건너편 직선! ${n} 앞서 갑니다!`], [L - 0.25, () => "마지막 코너!! 자리 싸움이 치열합니다!", true],
+    [L - 0.12, n => `직선 주로! 결승선이 보입니다! 선두는 ${n}!!`, true]);
+  return m;
+}
+let MARKS = genMarks(3);
 
 /* ---------- 소리 (파일 없이 코드로 만든 배경 음악 + 효과음) ---------- */
 const Snd = (() => {
@@ -954,9 +1182,20 @@ const Snd = (() => {
     stop(){ clearInterval(timer); },
     launch(){ if (!ac) return; const t = ac.currentTime; noise(0.6, 1800, 0.2, "bandpass", t); tone(300, 1600, 0.5, "sawtooth", 0.05, t); },
     boom(big){ if (!ac) return; const t = ac.currentTime; noise(big ? 1.2 : 0.6, 400, big ? 0.6 : 0.4, "lowpass", t); tone(120, 35, big ? 0.9 : 0.5, "sine", 0.35, t); },
+    gate(){ if (!ac) return; const t = ac.currentTime; noise(0.12, 1800, 0.35, "bandpass", t); tone(180, 120, 0.25, "square", 0.08, t); noise(0.08, 3500, 0.2, "highpass", t + 0.05); },
     shutter(){ if (!ac) return; const t = ac.currentTime; noise(0.05, 3000, 0.25, "highpass", t); noise(0.07, 1500, 0.2, "bandpass", t + 0.08); }
   };
 })();
+$("camBtn").onclick = () => { camPref = !camPref; save("mr_cam", camPref); renderCamBtn(); };
+$("maps").onclick = e => { const b = e.target.closest(".mapc"); if (!b) return; mapPref = b.dataset.m; save("mr_map", mapPref); renderMaps(); };
+function askMap(){
+  return new Promise(res => {
+    renderMaps(); $("mapPick").hidden = false;
+    $("mapGo").onclick = () => { $("mapPick").hidden = true; res(mapPref === "random" ? pick(Object.keys(MAPS)) : mapPref); };
+  });
+}
+$("mapGuide").innerHTML = Object.values(MAPS).map(m => `<div class="gi"><b>${m.em}</b><div><strong>${m.name} · ${m.laps}바퀴</strong><p>${m.desc}${m.weathers.length > 1 ? "" : " (날씨 없음)"}</p></div></div>`).join("")
+  + `<p class="gn">💡 맵마다 나오는 날씨가 달라요. 사막엔 비가 안 오고, 눈꽃 코스엔 눈이 와요.</p>`;
 function renderMute(){
   $("muteBtn").textContent = Snd.muted ? "🔇" : "🔊";
 }
@@ -983,12 +1222,28 @@ const WEATHER = {
   rain:  {em:"🌧️", name:"비",       desc:"물웅덩이와 미끄러운 코너 조심!", w:25},
   night: {em:"🌙", name:"야간 경기", desc:"어두워서 상자가 가까이 와야 보여요!", w:25},
   wind:  {em:"💨", name:"강풍",     desc:"아래쪽 직선은 순풍, 위쪽 직선은 맞바람!", w:20},
+  snow:  {em:"🌨️", name:"눈",       desc:"눈이 펑펑! 코너가 미끄러워요!", w:45},
 };
 function rollWeather(){
-  if (!weatherOn) return "sun";
-  let x = Math.random() * 100;
-  for (const [k, v] of Object.entries(WEATHER)) if ((x -= v.w) < 0) return k;
+  const list = curMap.weathers.filter(k => WEATHER[k]);
+  if (!weatherOn || list.length < 2) return "sun";
+  let x = Math.random() * list.reduce((t, k) => t + WEATHER[k].w, 0);
+  for (const k of list) if ((x -= WEATHER[k].w) < 0) return k;
   return "sun";
+}
+// 맵 특수 구역 (사막 모래 언덕, 눈꽃 빙판)
+function inZone(r){
+  const PR = PREF();
+  if (r.br) return false;
+  return zones.some(z => Math.abs(z.rad - r.rad) < LW * 1.3 && Math.abs(((((r.p - z.pos) % 1) + 1.5) % 1 - 0.5) * PR) < LW * 1.8);
+}
+function zoneLayer(){
+  return zones.map(z => {
+    const [x, y] = pt(z.rad, z.pos);
+    return z.kind === "sand"
+      ? `<ellipse cx="${x}" cy="${y}" rx="${LW*2}" ry="${LW*1.25}" fill="#b07d3f" opacity=".55"/><ellipse cx="${x-5}" cy="${y-4}" rx="${LW*1.1}" ry="${LW*0.55}" fill="#f5d7a1" opacity=".7"/>`
+      : `<ellipse cx="${x}" cy="${y}" rx="${LW*2}" ry="${LW*1.25}" fill="#7dd3fc" opacity=".6"/><ellipse cx="${x-6}" cy="${y-4}" rx="${LW*1.2}" ry="${LW*0.35}" fill="#ffffff" opacity=".8"/>`;
+  }).join("");
 }
 function renderWeatherSw(){ $("weatherSw").classList.toggle("on", weatherOn); }
 $("weatherSw").onclick = () => { weatherOn = !weatherOn; save("mr_weather", weatherOn); renderWeatherSw(); };
@@ -1000,6 +1255,7 @@ function seg(p){
 }
 function inPuddle(r){
   const PR = PREF();
+  if (r.br) return false;
   return puddles.some(pd => Math.abs(pd.rad - r.rad) < LW * 1.2 && Math.abs(((((r.p - pd.pos) % 1) + 1.5) % 1 - 0.5) * PR) < LW * 1.3);
 }
 function weatherLayer(){
@@ -1019,30 +1275,176 @@ function weatherLayer(){
   }
   return "";
 }
+/* ---------- 🚪 출발 게이트 ---------- */
+let gateState = "none";   // none | closed | open
+// 출발선 위치·방향 (어떤 트랙이든 결승선 기준)
+function startFrame(rad, back){
+  const PR = PREF(), [x0, y0] = pt(rad, -back / PR - 0.002), [x1, y1] = pt(rad, -back / PR + 0.002), [x, y] = pt(rad, -back / PR);
+  return [x, y, Math.atan2(y1 - y0, x1 - x0) * 180 / Math.PI];
+}
+function gateLayer(){
+  if (gateState === "none") return "";
+  const n = racers.length, L = Math.max(40, LW * 1.7), cls = gateState === "open" ? " open" : "", hh = (LW - 6) / 2;
+  let g = "";
+  for (let k = 0; k < n; k++) {
+    const [x, y, a] = startFrame(laneR(k), 0.12 * L);
+    g += `<g transform="translate(${x.toFixed(1)},${y.toFixed(1)}) rotate(${a.toFixed(1)})">
+      <rect x="${-L / 2}" y="${-LW / 2}" width="${L}" height="${LW}" fill="#ffffff22" stroke="#e9eef3" stroke-width="3"/>
+      ${k === 0 ? `<rect x="${-L / 2 - 6}" y="${-LW / 2 - 8}" width="${L + 12}" height="10" rx="3" fill="#d43c3c"/>` : ""}
+      ${k === n - 1 ? `<rect x="${-L / 2 - 6}" y="${LW / 2 - 2}" width="${L + 12}" height="10" rx="3" fill="#d43c3c"/>` : ""}
+      <rect class="door da${cls}" x="${L / 2 - 5}" y="${-LW / 2 + 3}" width="7" height="${hh}" fill="${k % 2 ? "#fff" : "#ffcc00"}" stroke="#333" stroke-width="1"/>
+      <rect class="door db${cls}" x="${L / 2 - 5}" y="${-LW / 2 + 3 + hh}" width="7" height="${hh}" fill="${k % 2 ? "#ffcc00" : "#fff"}" stroke="#333" stroke-width="1"/>
+    </g>`;
+  }
+  return g;
+}
+function gateNums(){
+  if (gateState === "none") return "";
+  const L = Math.max(40, LW * 1.7);
+  return racers.map(r => {
+    const [x, y] = startFrame(laneR(r.gate), 0.62 * L + 16), [vx, vy] = toView(x, y);
+    return `<g class="gnum" transform="translate(${vx.toFixed(1)},${vy.toFixed(1)})"><circle r="11" fill="${r.color}" stroke="#fff" stroke-width="2"/>
+      <text text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="900" fill="#fff">${r.gate + 1}</text></g>`;
+  }).join("");
+}
+function redrawGate(){ const g = $("gate"), n = $("gateNums"); if (g) g.innerHTML = gateLayer(); if (n) n.innerHTML = gateNums(); }
+
+/* ---------- 🛤️ 갈림길 + 🚂 계속 달리는 기차 (레일 익스프레스) ---------- */
+// 기차는 세로 철길을 따라 위에서 아래로 계속 달려요. 화면 밖으로 나가면 다시 위에서 나타나요
+const TRAIN = {y0: -320, y1: 940, speed: 125, len: 150};
+let trainY = 0, trainSnd = 0;
+function crossBlocked(c){
+  const half = c.short ? PATH.SW / 2 : LW * racers.length / 2;
+  return Math.abs(trainY - c.y) < TRAIN.len / 2 + half + 28;   // 기차가 건널목에 걸쳐 있거나 바로 앞이면 막힘
+}
+function trainStep(dt, now){
+  trainY += TRAIN.speed * dt;
+  if (trainY > TRAIN.y1) trainY = TRAIN.y0;
+  const g = $("trainG"); if (g) g.setAttribute("transform", `translate(${curMap.railX},${trainY.toFixed(1)})`);
+  PATH.cross.forEach((c, i) => {
+    const b = crossBlocked(c);
+    if (b !== !!c.on) {
+      c.on = b;
+      document.querySelectorAll(".xl" + i).forEach(e => e.classList.toggle("on", b));
+      if (b && now - trainSnd > 1500 && racers.some(r => !r.place && !!r.br === c.short && Math.abs(((((r.p - c.f) % 1) + 1.5) % 1) - 0.5) < 0.08)) {
+        trainSnd = now; Snd.bell();
+        say(c.short ? "🚂 땡땡땡! 기차가 지름길 건널목을 막았습니다!" : "🚂 땡땡땡! 기차가 큰길을 가로지릅니다! 정지!");
+      }
+    }
+  });
+}
+function forkStep(r, prev, np, now){
+  const s1 = PATH.s1, s2 = PATH.s2, cross = (a, b, x) => Math.floor(a - x) < Math.floor(b - x);
+  if (!r.br && cross(prev, np, s1) && np < LAPS - 0.05) {
+    r.br = Math.random() < 0.5;   // 메뉴마다 반반 확률로 길을 골라요 (공평!)
+    if (r.br) { r.rad = MID(); if (r.fav) say(`⭐ ${r.name}, 지름길로 들어갑니다! 기차 조심!`, true); else if (r.rk === 0) say(`${r.name}, 선두에서 지름길 승부수!`); }
+    else if (r.fav) say(`⭐ ${r.name}, 큰길로 갑니다!`);
+  }
+  // 🚦 건널목: 기차가 지나가는 중이면 정지선 앞에서 멈춰요
+  const PR = PREF();
+  for (const c of PATH.cross) {
+    if (c.short !== !!r.br || !c.on) continue;
+    const back = (RFS * 0.7 + 16) / (c.short ? PATH.sc.L / (s2 - s1) : PR);   // 정지선은 철길 바로 앞
+    const stop = ((c.f - back) % 1 + 1) % 1;
+    if (cross(prev, np, stop)) {
+      np = Math.floor(prev - stop) + 1 + stop - 1e-5;
+      if ((!r.wait || now - r.wait > 2500) && r.fav) say(`⭐ ${r.name}, 기차 때문에 멈춰 섰어요! 🚂`, true);
+      r.wait = now;
+    }
+  }
+  if (r.br && cross(prev, np, s2)) r.br = false;   // 지름길 끝, 큰길로 합류
+  return np;
+}
+// 레일 익스프레스 트랙 그리기 (가로 기준 좌표)
+function pathTrackSVG(T){
+  const n = racers.length, TW = LW * n, P = PATH;
+  const line = (C, off, step = 4) => { let q = ""; for (let i = 0; i < C.M; i += step) q += (C.xs[i] + C.ty[i] * off).toFixed(1) + "," + (C.ys[i] - C.tx[i] * off).toFixed(1) + " "; if (!C.closed) { const i = C.M - 1; q += (C.xs[i] + C.ty[i] * off).toFixed(1) + "," + (C.ys[i] - C.tx[i] * off).toFixed(1); } return q; };
+  const pl = (C, w, col, extra = "") => `<${C.closed ? "polygon" : "polyline"} points="${line(C, 0)}" fill="none" stroke="${col}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round" ${extra}/>`;
+  let g = "";
+  // 지름길 (자갈길)
+  g += pl(P.sc, P.SW + 14, T.rail) + pl(P.sc, P.SW + 8, T.edge) + pl(P.sc, P.SW, T.short);
+  // 큰길
+  g += pl(P.main, TW + 20, T.rail) + pl(P.main, TW + 12, T.edge) + pl(P.main, TW, T.dirt);
+  for (let i = 1; i < n; i++) g += `<polygon points="${line(P.main, (TW / 2) - LW * i, 3)}" fill="none" stroke="${T.lane}" stroke-width="1.5" stroke-dasharray="10 8"/>`;
+  // 🛤️ 철길 (길 위를 가로질러요)
+  const X = curMap.railX;
+  for (let y = -12; y < H + 12; y += 22) g += `<rect x="${X - 15}" y="${y}" width="30" height="7" rx="1" fill="#5b4632"/>`;
+  g += `<rect x="${X - 11}" y="-20" width="3.5" height="${H + 40}" fill="#cfd4da"/><rect x="${X + 7.5}" y="-20" width="3.5" height="${H + 40}" fill="#cfd4da"/>`;
+  // 🚦 건널목 신호등 (길 양쪽)
+  P.cross.forEach((c, i) => {
+    const half = c.short ? P.SW / 2 : TW / 2;
+    [-1, 1].forEach(sd => {
+      const y = c.y + sd * (half + 14);
+      g += `<g transform="translate(${X - 26},${y.toFixed(1)})"><rect x="-8" y="-8" width="16" height="16" rx="4" fill="#222"/><circle class="xlight xl${i}" r="5.5" fill="#555"/></g>`;
+    });
+  });
+  // 결승선
+  const fx0 = P.main.xs[0], fy0 = P.main.ys[0], ftx = P.main.tx[0], fty = P.main.ty[0];
+  const c = (o, a) => `${(fx0 + fty * o + ftx * a).toFixed(1)},${(fy0 - ftx * o + fty * a).toFixed(1)}`;
+  g += `<polygon points="${c(TW / 2, -6)} ${c(TW / 2, 6)} ${c(-TW / 2, 6)} ${c(-TW / 2, -6)}" fill="url(#chk)"/>`;
+  return g;
+}
+
+/* ---------- 🎥 응원 카메라 (응원 메뉴를 골랐을 때만) ---------- */
+let camPref = load("mr_cam", true), camActive = false, cam = null;
+function fullVB(){ return vertical() ? [0, 0, H, W] : [0, 0, W, H]; }
+function curVB(){ return ($("svg").getAttribute("viewBox") || fullVB().join(" ")).split(/\s+/).map(Number); }
+function renderCamBtn(){
+  const b = $("camBtn"); if (!b) return;
+  b.hidden = cheer === null || !racing;
+  b.textContent = camPref ? "🗺️ 전체 보기" : "🎥 내 메뉴 보기";
+}
+function camStep(realDt){
+  if (!camActive || cheer === null) return;
+  const r = racers[cheer], [fx0, fy0, FW, FH] = fullVB();
+  const target = camPref && !$("race").classList.contains("slow") ? (vertical() ? 1.9 : 2.1) : 1;   // 슬로모션(결승)은 전체 화면으로
+  const [px, py] = toView(...pt(r.rad, r.p, r.br));
+  if (!cam) cam = {x: fx0 + FW / 2, y: fy0 + FH / 2, z: 1};
+  const k = Math.min(1, realDt * 3.5);
+  cam.z += (target - cam.z) * k;
+  const tx = cam.z > 1.05 ? px : FW / 2, ty = cam.z > 1.05 ? py : FH / 2;
+  cam.x += (tx - cam.x) * k; cam.y += (ty - cam.y) * k;
+  const w = FW / cam.z, h = FH / cam.z;
+  const x = Math.max(0, Math.min(FW - w, cam.x - w / 2)), y = Math.max(0, Math.min(FH - h, cam.y - h / 2));
+  $("svg").setAttribute("viewBox", `${x.toFixed(1)} ${y.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}`);
+  $("race").classList.toggle("camon", cam.z > 1.3);   // 확대 중엔 해설을 아래로 (내 메뉴 안 가리게)
+}
+
 function weatherMult(r){
-  if (weather === "wind") { const g = seg(r.p); return g === "B" ? 1.12 : g === "T" ? 0.9 : 1; }
-  if (weather === "rain") return inPuddle(r) ? 0.78 : 0.97;
-  return 1;
+  let m = 1;
+  if (weather === "wind") { const g = seg(r.p); m *= g === "B" ? 1.12 : g === "T" ? 0.9 : 1; }
+  if (weather === "rain") m *= inPuddle(r) ? 0.78 : 0.97;
+  if (weather === "snow") m *= 0.96;
+  if (zones.length && inZone(r)) m *= curMap.zone.kind === "sand" ? 0.75 : 1.12;
+  return m;
 }
 
 /* ---------- 경주 ---------- */
-const LAPS = 3;
+let LAPS = 3;
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+let raceId = 0;
+const alive = () => racing && myRace === raceId;
+let myRace = 0;
 async function startRace(){
   if (racing || runners.length < 2) return;
-  racing = true;
+  racing = true; myRace = ++raceId;
+  const id = myRace, live = () => racing && id === raceId;
   Snd.init(); Snd.stop();
   $("modal").hidden = true;
   $("race").hidden = false;
   document.body.style.overflow = "hidden";
-  $("exitBtn").disabled = true;
+  $("svg").innerHTML = ""; $("rank").innerHTML = ""; $("lap").textContent = ""; $("wBadge").textContent = ""; $("msg").hidden = true;
+  $("race").style.setProperty("--rbg", "#2f6e3c"); $("race").classList.remove("w-sun", "w-rain", "w-night", "w-wind", "w-snow");
+  const mk = await askMap(); if (!live()) return;
+  useMap(mk);
   $("lap").textContent = `LAP 1/${LAPS}`; $("lap").classList.remove("final");
   try { wake = await navigator.wakeLock.request("screen"); } catch(e){ wake = null; }   // 경주 중 화면 꺼짐 방지
-  cheer = null; weather = "sun"; puddles = []; $("wBadge").textContent = "";
-  $("race").classList.remove("w-sun", "w-rain", "w-night", "w-wind"); $("podium").hidden = true;
+  trainY = TRAIN.y0 + Math.random() * (TRAIN.y1 - TRAIN.y0);
+  cheer = null; camActive = false; cam = null; gateState = "closed"; weather = "sun"; puddles = []; zones = []; $("wBadge").textContent = "";
+  $("race").classList.remove("w-sun", "w-rain", "w-night", "w-wind", "w-snow"); $("podium").hidden = true;
   // 🎲 게이트 추첨: 누가 안쪽에서 출발할지 매번 랜덤 → 길게 보면 모두에게 공평
   const gates = shuffle(runners.map((_, i) => i));
-  racers = runners.map((r, i) => ({...r, color: COLORS[i], p:0, v:0, target:0, fx:[], fav:false, gate: gates[i], slot: gates[i], rad: 0,
+  racers = runners.map((r, i) => ({...r, color: COLORS[i], p:0, v:0, target:0, fx:[], fav:false, br:false, wait:0, gate: gates[i], slot: gates[i], rad: 0,
     // 말마다 좋아하는 자리가 달라요 (레일 붙기 좋아하는 말, 한두 칸 밖에서 달리는 말) → 2~3줄로 뭉쳐 달려요
     pref: Math.min(runners.length - 1, pick([0, 0, 1, 1, 2])), prefT: 0}));
   boxes = [];
@@ -1051,43 +1453,58 @@ async function startRace(){
   placeAll(); renderRank();
   $("msg").hidden = true;
 
-  cheer = await askCheer();
+  cheer = await askCheer(); if (!live()) return;
   if (cheer !== null) { racers[cheer].fav = true; lastCheer = racers[cheer].name; save("mr_cheer", lastCheer); }
   if (itemsOn) {
     // 레인마다 상자 하나씩 한 줄 + 보너스 2개 (먹으면 3초 뒤 다시 생겨요)
     // 상자를 트랙 곳곳에 흩어 놓아요 (먹으면 4.5초 뒤 다른 곳에 다시 생겨요)
-    const nb = Math.max(5, racers.length + 1);
+    const nb = Math.max(5, racers.length + 1) + (curMap.boxBonus || 0);
     for (let k = 0; k < nb; k++) { const b = {off: 0}; placeBox(b, 0.06 + (k + 0.15 + Math.random() * 0.7) * (0.88 / nb)); boxes.push(b); }
   }
   drawTrack(); placeAll(); renderRank();
   weather = rollWeather();
   puddles = weather === "rain" ? [0.18, 0.42, 0.66, 0.86].map(pos => ({pos: pos + (Math.random() - 0.5) * 0.06, rad: laneR(Math.random() * racers.length | 0)})) : [];
-  const raceEl = $("race"); raceEl.classList.remove("w-sun", "w-rain", "w-night", "w-wind"); raceEl.classList.add("w-" + weather);
-  $("wBadge").textContent = `${WEATHER[weather].em} ${WEATHER[weather].name}`;
+  if (curMap.zone) zones = [0.2, 0.45, 0.68, 0.88].slice(0, curMap.zone.n).map(pos => ({kind: curMap.zone.kind, pos: pos + (Math.random() - 0.5) * 0.05, rad: laneR(Math.random() * racers.length | 0)}));
+  const raceEl = $("race"); raceEl.classList.remove("w-sun", "w-rain", "w-night", "w-wind", "w-snow"); raceEl.classList.add("w-" + weather);
+  const hasWeather = curMap.weathers.length > 1 && weatherOn;
+  $("wBadge").textContent = `${curMap.em} ${curMap.name}` + (hasWeather ? ` · ${WEATHER[weather].em} ${WEATHER[weather].name}` : "");
   drawTrack(); placeAll();
   const inner = racers.find(r => r.gate === 0);
+  say(`🗺️ 오늘의 코스: ${curMap.em} ${curMap.name}! ${curMap.desc}`, true);
+  await sleep(2200); if (!live()) return;
   say(`🎲 게이트 추첨! 제일 안쪽 1번 게이트는 ${inner.em} ${inner.name}!`, true);
-  await sleep(1600);
-  say(`${WEATHER[weather].em} 오늘의 날씨: ${WEATHER[weather].name}! ${WEATHER[weather].desc}`, true);
-  await sleep(1900);
+  await sleep(1600); if (!live()) return;
+  if (hasWeather) {
+    say(`${WEATHER[weather].em} 오늘의 날씨: ${WEATHER[weather].name}! ${WEATHER[weather].desc}`, true);
+    await sleep(1900); if (!live()) return;
+  }
 
   const c = $("count"); c.hidden = false; $("msg").hidden = true;
   for (const n of ["3","2","1","GO!"]) {
     c.textContent = n; c.classList.toggle("go", n === "GO!");
     c.classList.remove("pop"); void c.offsetWidth; c.classList.add("pop");
-    n === "GO!" ? Snd.go() : Snd.count();
+    if (n === "GO!") { Snd.go(); Snd.gate(); gateState = "open"; document.querySelectorAll("#gate .door").forEach(d => d.classList.add("open")); }
+    else Snd.count();
     await sleep(n === "GO!" ? 800 : 1000);
+    if (!live()) { c.hidden = true; return; }
   }
+  setTimeout(() => { if (gateState === "open") { gateState = "none"; redrawGate(); } }, 1600);   // 게이트 치우기
+  if (cheer !== null) { camActive = true; cam = null; }
+  renderCamBtn();
   c.hidden = true; $("msg").hidden = false;
   say(cheer !== null ? `출발!! ⭐ ${racers[cheer].name} 화이팅!` : "출발했습니다!!", true);
   $("svg").classList.add("running");
   raceStart = performance.now();
+  if (PATH) PATH.cross.forEach(c => c.on = false);
   Snd.music();
 
   tape = []; tapeShift = 0; shots = []; placeN = 0; firstCross = 0; crossInfo = null; photoPending = false; $("shots") && ($("shots").innerHTML = "");
   let favLeadT = -1e9, spurtSet = false, laneT = 0, last = performance.now(), retarget = 0, leader = -1, rankT = 0, mark = 0, slowSaid = false, boxT = 0;
   const step = now => {
+    if (!live()) return;
     let dt = Math.min(0.05, (now - last) / 1000); last = now;
+    camStep(dt);
+    if (PATH && PATH.cross.length) trainStep(dt * (slowSaid ? 0.3 : 1), now);   // 🚂 (슬로모션이면 기차도 느리게)
     const order = racers.map((r,i)=>i).sort((a,b)=>racers[b].p - racers[a].p);
     const top = racers[order[0]].p;
     // 결승 직전 + 1·2등이 붙어 있으면 슬로모션 (모두에게 똑같이 적용)
@@ -1124,15 +1541,19 @@ async function startRace(){
     if (laneT <= 0) {
       laneT = 0.2;
       const PR = PREF(), taken = [], claimed = new Set();
-      const busy = (r, rad) => racers.some(o => o !== r && Math.abs((o.p - r.p) * PR) < 34 && Math.abs(o.rad - rad) < LW * 0.85)
+      const busy = (r, rad) => racers.some(o => o !== r && !!o.br === !!r.br && Math.abs((o.p - r.p) * PR) < 34 && Math.abs(o.rad - rad) < LW * 0.85)
                             || taken.some(t => Math.abs(t.p - r.p) * PR < 34 && Math.abs(t.rad - rad) < LW * 0.85);
       for (const idx of order) {
         const r = racers[idx];
         if (r.place) { r.slot = racers.length - 1; continue; }   // 골인한 말은 바깥으로 빠져서 천천히
-        if (weather === "rain" && onCurve(r.p) && Math.random() < 0.02) {   // 🌧️ 빗길 코너에서 미끄덩
+        if (r.br) continue;                                       // 지름길은 한 줄이라 자리 바꾸기 없음
+        if ((weather === "rain" || weather === "snow") && onCurve(r.p) && Math.random() < 0.02) {   // 🌧️🌨️ 미끄러운 코너
           r.fx.push({kind:"💦", t0:now, dur:1000}); tagFx(r, "💦 미끄덩!", true);
         }
-        const ahead = racers.some(o => o !== r && (o.p - r.p) * PR > 0 && (o.p - r.p) * PR < 70 && Math.abs(o.rad - r.rad) < LW * 0.8);
+        if (curMap.zone && curMap.zone.kind === "ice" && inZone(r) && Math.random() < 0.06) {   // 🧊 빙판에서 꽈당
+          r.fx.push({kind:"💦", t0:now, dur:1100}); tagFx(r, "🧊 꽈당!", true);
+        }
+        const ahead = racers.some(o => o !== r && !!o.br === !!r.br && (o.p - r.p) * PR > 0 && (o.p - r.p) * PR < 70 && Math.abs(o.rad - r.rad) < LW * 0.8);
         let want = r.slot, tgt = null;
         if (ahead) {
           // 막혔다! 가까운 빈자리로 (바깥 먼저 보고, 안쪽도 비었으면 안쪽)
@@ -1163,7 +1584,7 @@ async function startRace(){
       let m = 1, badge = "", spin = false, zap = false;
       r.fx = r.fx.filter(f => now - f.t0 < f.dur);
       for (const f of r.fx) {
-        const e = env((now - f.t0) / f.dur);
+        const e = env((now - f.t0) / f.dur) * (curMap.power || 1);   // 우주 맵은 아이템 효과 1.3배
         if (f.kind === "🚀") m *= 1 + 0.7 * e;
         if (f.kind === "🧲") m *= 1 + f.amt * e;
         if (f.kind === "🐢") m *= 1 - 0.5 * e;
@@ -1173,15 +1594,19 @@ async function startRace(){
         if (f.kind === "💦") { m *= 1 - 0.45 * e; spin = e > 0.3; }
         badge = f.kind;
       }
+      m = Math.max(0.05, m);
       r.el.classList.toggle("spin", spin);
       r.el.classList.toggle("zapped", zap);
       // 옆으로 이동 (천천히)
       const tr = laneR(r.slot), lat = 120 * dt;
       r.rad += Math.max(-lat, Math.min(lat, tr - r.rad));
       // 코너에서 바깥에 있으면 같은 속도라도 돌아가는 거리가 길어서 손해
-      const curveLoss = onCurve(r.p) ? R0() / r.rad : 1;
+      let curveLoss;
+      if (!PATH) curveLoss = onCurve(r.p) ? R0() / r.rad : 1;
+      else if (r.br) curveLoss = PATH.ratio * 0.92;   // 지름길: 짧지만 자갈길이라 살짝 느려요
+      else curveLoss = 1 / Math.max(0.72, Math.min(1.35, 1 - curveAt(PATH.main, r.p) * (MID() - r.rad)));   // 코너 안쪽이 유리
       // 바로 뒤에 붙어 달리면 바람을 덜 맞아서 살짝 빨라져요 (슬립스트림)
-      const draft = racers.some(o => o !== r && (o.p - r.p) * PR > 20 && (o.p - r.p) * PR < 90 && Math.abs(o.rad - r.rad) < LW * 1.6) ? 1.08 : 1;
+      const draft = racers.some(o => o !== r && !!o.br === !!r.br && (o.p - r.p) * PR > 20 && (o.p - r.p) * PR < 90 && Math.abs(o.rad - r.rad) < LW * 1.6) ? (curMap.draft || 1.08) : 1;
       m *= draft * weatherMult(r);
       const prev = r.p;
       if (r.place) {   // 골인 후엔 천천히 속도를 줄여요
@@ -1193,25 +1618,27 @@ async function startRace(){
       let np = r.p + r.v * m * dt * curveLoss;
       // 바로 앞에 말이 있으면 뚫고 지나갈 수 없어요
       for (const o of racers) {
-        if (o === r || o.place || !moved.has(o) || o.p <= r.p || Math.abs(o.rad - r.rad) >= LW * 0.75) continue;
+        if (o === r || o.place || !moved.has(o) || o.p <= r.p || !!o.br !== !!r.br || (!r.br && Math.abs(o.rad - r.rad) >= LW * 0.75)) continue;
         np = Math.min(np, Math.max(r.p, o.p - 26 / PR));
       }
+      if (PATH) np = forkStep(r, prev, np, now);   // 🛤️ 갈림길 · 🚂 건널목
       r.p = np; moved.add(r);
       if (r.p >= LAPS) crossLine(r, now);
       for (const bx of boxes) {
-        if (!r.place && now >= (r.cool || 0) && Math.abs(bx.rad - r.rad) < LW * 0.6 && now >= bx.off && Math.floor(prev - bx.pos) < Math.floor(r.p - bx.pos) && r.p < LAPS - 0.05) {
+        if (!r.place && !r.br && now >= (r.cool || 0) && Math.abs(bx.rad - r.rad) < LW * 0.6 && now >= bx.off && Math.floor(prev - bx.pos) < Math.floor(r.p - bx.pos) && r.p < LAPS - 0.05) {
           bx.off = now + 4500; boxChanged = true; placeBox(bx);
           r.cool = now + ITEM_COOL;   // 한 번 먹으면 한동안 상자를 못 먹어요 (그냥 지나가요)
           useItem(r, order.indexOf(i), now, top); break;
         }
       }
+      if (r.wait && now - r.wait < 300) badge = "🚦";
       if (r.badge.textContent !== badge) r.badge.textContent = badge;
     });
     if (boxT <= 0) { boxT = 0.3; boxChanged = true; }
     if (boxChanged) renderBoxes();
     placeAll();
     // 📼 리플레이용 녹화 (마지막 몇 초만 기억)
-    tape.push(racers.map(r => [r.p, r.rad])); if (tape.length > 600) { tape.shift(); tapeShift++; }
+    tape.push(racers.map(r => [r.p, r.rad, r.br ? 1 : 0])); if (tape.length > 600) { tape.shift(); tapeShift++; }
     updateShots(dt, now);
     if (rankT <= 0) { rankT = 0.25; renderRank(); }
 
@@ -1238,6 +1665,9 @@ async function startRace(){
 }
 
 async function finish(order){
+  if (camActive) { camActive = false; $("race").classList.remove("camon"); await zoomVB(curVB(), fullVB(), 600); }
+  if (!alive()) return;
+  $("camBtn").hidden = true;
   const w = order[0], secs = ((performance.now() - raceStart) / 1000).toFixed(1);
   try { navigator.vibrate && navigator.vibrate([80, 60, 160]); } catch(e){}
   try { wake && wake.release(); } catch(e){}
@@ -1247,8 +1677,8 @@ async function finish(order){
   const photo = order.length > 1 && margin < 0.5;
   if (photo) {
     say("간발의 차이!! 📸 사진 판독 들어갑니다!", true);
-    await sleep(700);
-    await photoReplay(order, margin);
+    await sleep(700); if (!alive()) return;
+    await photoReplay(order, margin); if (!alive()) return;
   }
   // 이제 공개! 메달 달고 순위표 보여 주기
   photoPending = false;
@@ -1258,9 +1688,8 @@ async function finish(order){
   renderRank();
   Snd.finish();
   say(`🏆 ${w.name} 우승!!! 오늘의 메뉴는 ${w.name}입니다!`, true);
-  await podium(order);
+  await podium(order); if (!alive()) return;
   racing = false;
-  $("exitBtn").disabled = false;
   $("wEm").textContent = w.em; $("wNm").textContent = w.name;
   $("order").innerHTML = (photo ? `<div class="photo">📸 사진 판독 끝에 우승!</div>` : "") +
     `<div class="full">${order.slice(1).map((r,i) => `<span>${i+2}등 ${r.em} ${esc(r.name)}${r.fav ? " ⭐" : ""}</span>`).join("")}</div>` +
@@ -1308,15 +1737,15 @@ async function zoomVB(from, to, ms){
 }
 function placeFrame(fr){
   racers.forEach((r, i) => {
-    const [x, y] = toView(...pt(fr[i][1], Math.min(fr[i][0], LAPS + 0.02)));
+    const [x, y] = toView(...pt(fr[i][1], Math.min(fr[i][0], LAPS + 0.02), fr[i][2]));
     r.el.setAttribute("transform", `translate(${x.toFixed(1)},${y.toFixed(1)})`);
   });
 }
 async function photoReplay(order, margin){
   const race = $("race"), v = vertical();
-  const full = v ? [0, 0, H, W] : [0, 0, W, H];
+  const full = fullVB();
   // 결승선 주변만 크게
-  const [fx, fy] = toView(CX - 40, CY + (RIN + ROUT) / 2);
+  const [fx, fy] = toView(...pt(MID(), -40 / PREF()));
   const zw = 330, zh = Math.max(ROUT - RIN + 70, 170);
   const zoom = v ? [fx - zh/2, fy - zw/2, zh, zw] : [fx - zw/2, fy - zh/2, zw, zh];
   // 결승선 140유닛 앞부터 다시 재생
@@ -1335,16 +1764,19 @@ async function photoReplay(order, margin){
   placeFrame(frames[0]);
   await sleep(400);
   // 아주 천천히 다시 재생
-  for (let i = 0; i < frames.length; i += 1) {
+  const stepN = Math.max(1, Math.ceil(frames.length / 80));   // 리플레이는 길어도 3초 정도
+  for (let i = 0; i < frames.length; i += stepN) {
+    if (!alive()) return;
     placeFrame(frames[i]);
-    await sleep(frames.length > 90 ? 28 : 45);
+    await sleep(38);
   }
+  placeFrame(frames[frames.length - 1]);
   // 결승선을 넘는 순간에서 멈춤
   Snd.shutter();
   const w = order[0], s2 = order[1];
   $("verdict").innerHTML = `<div class="vt">📸 판독 결과</div>
-    <div class="v1">1착 ${w.em} ${esc(w.name)}</div>
-    <div class="v2">2착 ${s2.em} ${esc(s2.name)}</div>
+    <div class="v1">1등 ${w.em} ${esc(w.name)}</div>
+    <div class="v2">2등 ${s2.em} ${esc(s2.name)}</div>
     <div class="vm">${marginWord(margin)}!!</div>`;
   $("verdict").hidden = false;
   race.classList.add("frozen");
@@ -1373,8 +1805,14 @@ function confetti(){
 
 /* ---------- 버튼 ---------- */
 function exitRace(){
-  if (racing) return;
-  $("modal").hidden = true; $("race").hidden = true;
+  // 경주 중이든 고르는 중이든 언제든 나갈 수 있어요
+  racing = false; raceId++;
+  cancelAnimationFrame(raf);
+  ["mapPick", "cheerPick", "count", "podium", "verdict", "replayTag"].forEach(k => { const e = $(k); if (e) e.hidden = true; });
+  $("race").classList.remove("slow", "replay", "frozen", "camon");
+  $("rank").style.visibility = ""; photoPending = false;
+  try { wake && wake.release(); } catch(e){}
+  $("modal").hidden = true; $("race").hidden = true; camActive = false; gateState = "none";
   document.body.style.overflow = "";
   Snd.stop();
   renderSetup();
