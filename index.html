@@ -114,6 +114,14 @@ span.ico{width:auto;height:auto;vertical-align:baseline}
 .promo b{font-size:16px}
 .promo small{font-size:12px;opacity:.85;line-height:1.35}
 .promo .pg{flex:none;background:#fff;color:#1e3a8a;font-weight:900;font-size:13px;padding:8px 12px;border-radius:999px}
+.itemOpt{text-align:left;margin:-2px 0 12px}
+.ioh{font-size:14px;font-weight:800;margin-bottom:6px}
+.ioh small{font-weight:600;color:var(--sub);font-size:12px;margin-left:4px}
+.ichips{display:flex;flex-wrap:wrap;gap:6px}
+.ichip{padding:6px 10px;border-radius:999px;background:#fff3dc;border:2px solid #f2c26b;font-size:13px;font-weight:800;color:#5a3a1a}
+.ichip.off{background:#eee;border-color:#ddd;color:#aaa;text-decoration:line-through;filter:grayscale(1)}
+.ichip.all{background:#fff;border-color:#d8ccbb;color:var(--sub)}
+.inote{font-size:12px;color:#c0392b;font-weight:700;margin-top:6px}
 .mapDesc{text-align:left;background:#faf4ea;border-radius:14px;padding:10px 12px;margin:10px 0 12px;min-height:112px}
 .mapDesc .mdh{font-weight:900;font-size:15px;color:var(--ink);margin-bottom:4px}
 .mapDesc .mdh span{font-size:12px;font-weight:700;color:#fff;background:var(--accent);border-radius:8px;padding:1px 7px;margin-left:4px;vertical-align:1px}
@@ -494,6 +502,10 @@ body.mobile .ri .gap{font-size:10px}
           <div class="cs">맵마다 트랙 모양과 규칙이 달라요</div>
           <div class="maps" id="maps"></div>
           <div class="mapDesc" id="mapDesc"></div>
+          <div class="itemOpt">
+            <div class="ioh">🎁 아이템 설정 <small>눌러서 끄고 켤 수 있어요</small></div>
+            <div class="ichips" id="itemChips"></div>
+          </div>
           <button class="big" id="mapGo">이 맵으로 출발!</button>
         </div>
       </div>
@@ -1004,10 +1016,12 @@ function tagFx(r, text, small){
 }
 function useItem(r, rank, now, topP){
   const f = racers.length > 1 ? rank / (racers.length - 1) : 0;
-  const ws = ITEMS.map(it => it.w(f)); let x = Math.random() * ws.reduce((a,b)=>a+b), k = 0;
-  while ((x -= ws[k]) > 0) k++;
-  const canNuke = racers.filter(o => !o.out).length >= 3;   // 탈락 후에도 2개 이상은 남아야 경주가 돼요
-  const it = canNuke && Math.random() < NUKE_P ? NUKE : ITEMS[k], n = (r.fav ? "⭐ " : "") + r.name, loud = !!r.fav;
+  const ws = ITEMS.map(it => itemOk(it) ? it.w(f) : 0), sum = ws.reduce((a,b)=>a+b, 0); let x = Math.random() * sum, k = 0;
+  while (k < ws.length - 1 && (x -= ws[k]) > 0) k++;
+  const canNuke = itemOk(NUKE) && racers.filter(o => !o.out).length >= 3;   // 탈락 후에도 2개 이상은 남아야 경주가 돼요
+  const nuke = canNuke && Math.random() < NUKE_P;
+  if (!nuke && sum <= 0) return;   // 켜진 아이템 중 이 순위가 받을 수 있는 게 없으면 꽝
+  const it = nuke ? NUKE : ITEMS[k], n = (r.fav ? "⭐ " : "") + r.name, loud = !!r.fav;
   tagFx(r, `${it.em} ${it.name}!`);
   Snd.item(it.em);
   if (it.em === "🎯" || it.em === "💣") {
@@ -1326,9 +1340,26 @@ const Snd = (() => {
 })();
 $("camBtn").onclick = () => { camPref = !camPref; save("mr_cam", camPref); renderCamBtn(); };
 $("maps").onclick = e => { const b = e.target.closest(".mapc"); if (!b) return; mapPref = b.dataset.m; save("mr_map", mapPref); renderMaps(); };
+// 🎁 아이템 하나하나 끄기/켜기 (이 기기에 저장돼요)
+let itemOff = new Set(load("mr_itemoff", []));
+const ALLITEMS = () => [...ITEMS, NUKE];
+const itemOk = it => !itemOff.has(it.em);
+function renderItemChips(){
+  const allOn = ALLITEMS().every(itemOk);
+  $("itemChips").innerHTML = ALLITEMS().map(it => `<button class="ichip ${itemOk(it) ? "" : "off"}" data-em="${it.em}">${it.em} ${it.name}</button>`).join("")
+    + `<button class="ichip all" data-em="all">${allOn ? "전부 끄기" : "전부 켜기"}</button>`
+    + (!itemsOn ? `<div class="inote">⚠️ 메뉴판의 '아이템 모드'가 꺼져 있어서 지금은 아이템이 안 나와요</div>`
+       : !ALLITEMS().some(itemOk) ? `<div class="inote">아이템을 전부 끄면 아이템 상자가 안 나와요</div>` : "");
+}
+$("itemChips").onclick = e => {
+  const b = e.target.closest(".ichip"); if (!b) return;
+  if (b.dataset.em === "all") { if (ALLITEMS().every(itemOk)) ALLITEMS().forEach(it => itemOff.add(it.em)); else itemOff.clear(); }
+  else itemOff.has(b.dataset.em) ? itemOff.delete(b.dataset.em) : itemOff.add(b.dataset.em);
+  save("mr_itemoff", [...itemOff]); renderItemChips();
+};
 function askMap(){
   return new Promise(res => {
-    renderMaps(); $("mapPick").hidden = false;
+    renderMaps(); renderItemChips(); $("mapPick").hidden = false;
     $("mapGo").onclick = () => { $("mapPick").hidden = true; res(mapPref === "random" ? pick(Object.keys(MAPS)) : mapPref); };
   });
 }
@@ -1599,7 +1630,7 @@ async function startRace(){
 
   cheer = await askCheer(); if (!live()) return;
   if (cheer !== null) { racers[cheer].fav = true; lastCheer = racers[cheer].name; save("mr_cheer", lastCheer); }
-  if (itemsOn) {
+  if (itemsOn && ALLITEMS().some(itemOk)) {
     // 레인마다 상자 하나씩 한 줄 + 보너스 2개 (먹으면 3초 뒤 다시 생겨요)
     // 상자를 트랙 곳곳에 흩어 놓아요 (먹으면 4.5초 뒤 다른 곳에 다시 생겨요)
     const nb = Math.max(5, racers.length + 1) + (curMap.boxBonus || 0);
