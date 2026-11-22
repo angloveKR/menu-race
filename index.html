@@ -286,6 +286,20 @@ body.mobile .ri{font-size:12px;padding:4px 6px}
 .nukewarn .nw{text-align:center;padding:12px 22px;border-radius:14px;background:#1a0000d9;border:3px solid #ff2b2b;box-shadow:0 0 30px #ff2b2b}
 .nukewarn b{display:block;color:#ff3b3b;font-size:clamp(20px,4.4vw,40px);font-weight:900;letter-spacing:2px;animation:nwblink .35s steps(2) infinite}
 .nukewarn small{display:block;color:#ffd6d6;font-size:13px;font-weight:700;margin-top:4px}
+.nroul{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px}
+.nar{color:#ff3b3b;font-size:18px;animation:nwblink .35s steps(2) infinite}
+.nslot{display:inline-flex;align-items:center;gap:6px;min-width:150px;justify-content:center;padding:7px 14px;border-radius:10px;
+  background:#fff;color:#2b2118;font-size:clamp(16px,3.2vw,24px);font-weight:900;border:3px solid #ff2b2b}
+.nslot .ico{width:1.5em;height:1.5em;margin:0}
+.ndot{width:12px;height:12px;border-radius:50%;flex:none;border:2px solid #fff;box-shadow:0 0 0 1px #0003}
+.nslot.flip{animation:nflip .12s ease-out}
+@keyframes nflip{from{transform:translateY(-35%);opacity:.3}to{transform:none;opacity:1}}
+.nslot.hit{animation:nhit .5s ease-out;background:#ffe14d;box-shadow:0 0 24px #ff2b2b}
+@keyframes nhit{0%{transform:scale(1)}40%{transform:scale(1.25)}100%{transform:scale(1)}}
+.nukewarn.done{animation:none;background:radial-gradient(circle,#0000 30%,#ff000055 100%)}
+.nw.dead{animation:nhit .5s ease-out}
+.nw.dead .nbig{font-size:44px;line-height:1}
+.nw.dead b{animation:none;margin-top:6px}
 @keyframes nwblink{50%{opacity:.25}}
 .rc.locked > circle:not(.halo){stroke:#ff2b2b;stroke-width:6;animation:lockb .25s steps(2) infinite}
 @keyframes lockb{50%{stroke:#fff}}
@@ -1010,7 +1024,10 @@ function useItem(r, rank, now, topP){
     const cand = racers.filter(o => !o.place && !o.out), tg = pick(cand), id = raceId, stage = document.querySelector(".stage");
     // 화면이 붉어지면서 NUCLEAR WARNING! 표적 표시가 메뉴들 사이를 돌다가 랜덤으로 멈춰요
     const warn = document.createElement("div"); warn.className = "nukewarn";
-    warn.innerHTML = `<div class="nw"><b>☢️ NUCLEAR WARNING ☢️</b><small>${esc(josa(r.name + "이(가)"))} 핵폭탄을 뽑았다! 표적 추첨 중…</small></div>`;
+    warn.innerHTML = `<div class="nw"><b>☢️ NUCLEAR WARNING ☢️</b><small>${esc(josa(r.name + "이(가)"))} 핵폭탄을 뽑았다! 표적 추첨 중…</small>
+      <div class="nroul"><span class="nar">▶</span><div class="nslot"></div><span class="nar">◀</span></div></div>`;
+    const slot = warn.querySelector(".nslot");
+    const showSlot = o => { slot.innerHTML = `<span class="ndot" style="background:${o.color}"></span>${ico(o)}<span class="nnm">${esc(o.name)}</span>`; slot.classList.remove("flip"); void slot.offsetWidth; slot.classList.add("flip"); };
     stage.appendChild(warn); Snd.siren(2.6);
     say(`☢️☢️ 1% 전설의 핵폭탄!!! 누가 터질까요!?`, true);
     let hop = 0, cur = null, delay = 90, t = 0;
@@ -1019,15 +1036,19 @@ function useItem(r, rank, now, topP){
       if (cur) cur.el.classList.remove("locked");
       t += delay;
       cur = t >= 2100 ? tg : cand[(cand.indexOf(cur) + 1 + (Math.random() * 2 | 0)) % cand.length];
-      cur.el.classList.add("locked"); Snd.tick();
+      cur.el.classList.add("locked"); showSlot(cur); Snd.tick();
       if (cur !== tg || t < 2100) { delay = Math.min(260, delay * 1.12); setTimeout(spin, delay); }
-      else setTimeout(blast, 500);
+      else { slot.classList.add("hit"); setTimeout(blast, 700); }
     };
     setTimeout(spin, 300);
     const blast = () => {
-      tg.el.classList.remove("locked"); warn.remove();
-      if (!racing || id !== raceId) return;
-      if (tg.place) { say(`😮 ${tg.name}, 골인해서 핵폭탄을 피했습니다!`, true); return; }
+      tg.el.classList.remove("locked");
+      if (!racing || id !== raceId) { warn.remove(); return; }
+      if (tg.place) { warn.remove(); say(`😮 ${tg.name}, 골인해서 핵폭탄을 피했습니다!`, true); return; }
+      // 누가 탈락했는지 크게 보여주고 1.8초 뒤 사라져요
+      warn.classList.add("done");
+      warn.innerHTML = `<div class="nw dead"><div class="nbig">💀</div><div class="nslot hit"><span class="ndot" style="background:${tg.color}"></span>${ico(tg)}<span class="nnm">${esc(tg.name)}</span></div><b>탈락!!</b><small>${tg === r ? "자기가 뽑은 핵폭탄에 맞았다 ㅋㅋㅋ" : `오늘 ${esc(josa(tg.name + "은(는)"))} 못 먹습니다`}</small></div>`;
+      setTimeout(() => warn.remove(), 1800);
       tg.out = true; tg.fx = []; tg.el.classList.add("out");
       tagFx(tg, "💀 탈락!!", true);
       const z = document.createElement("div"); z.className = "zapfx nuke"; document.querySelector(".stage").appendChild(z);
